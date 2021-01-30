@@ -94,7 +94,7 @@ public class NetworkPlayer : MonoBehaviour
 
     public void MakeIntoHuman()
     {
-        PhotonView.RPC(nameof(MakeIntoHumanRPC), RpcTarget.AllBuffered, PhotonView.Owner, Username.Value);
+        PhotonView.RPC(nameof(MakeIntoHumanRPC), RpcTarget.AllBuffered, PhotonView.Owner);
     }
 
     [PunRPC]
@@ -109,7 +109,7 @@ public class NetworkPlayer : MonoBehaviour
     
     public void MakeIntoGhost()
     {
-        PhotonView.RPC(nameof(MakeIntoGhostRPC), RpcTarget.AllBuffered, PhotonView.Owner, Username.Value);
+        PhotonView.RPC(nameof(MakeIntoGhostRPC), RpcTarget.AllBuffered, PhotonView.Owner);
     }
 
     [PunRPC]
