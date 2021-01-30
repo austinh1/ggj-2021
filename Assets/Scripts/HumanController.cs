@@ -23,7 +23,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         float inputX = Input.GetAxis("Horizontal Human");
         float inputY = Input.GetAxis("Vertical Human");
 
-        rigidbody2D.velocity = new Vector2(speed * inputX, speed * inputY);
+        var direction = new Vector3(inputX, inputY);
+
+        rigidbody2D.velocity = direction.normalized * speed;
 
         if (Input.GetKeyDown(KeyCode.F))
         {
