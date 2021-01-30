@@ -33,7 +33,7 @@ public class NetworkPlayer : MonoBehaviour
     
     private MainMenu MainMenu { get; set; }
     
-    private void Start()
+    private void Awake()
     {
         Game = FindObjectOfType<Game>();
         MainMenu = FindObjectOfType<MainMenu>();
