@@ -356,6 +356,8 @@
           <e p="HumanController.cs" t="Include" />
           <e p="Interactable.cs" t="Include" />
           <e p="IPlayerMovement.cs" t="Include" />
+          <e p="Key.cs" t="Include" />
+          <e p="LockedDoor.cs" t="Include" />
           <e p="MainMenu.cs" t="Include" />
           <e p="MonoBehaviourSingleton.cs" t="Include" />
           <e p="NetworkPlayer.cs" t="Include" />
