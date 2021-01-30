@@ -28,8 +28,14 @@ public class NetworkPlayer : MonoBehaviour
     private bool IsLocal => PhotonView.IsMine;
 
     public Observable<string> Username { get; } = new Observable<string>();
-
-    private void Awake()
+    
+    public Observable<string> HostUsername { get; } = new Observable<string>();
+    
+    public Game Game { get; set; }
+    
+    public MainMenu MainMenu { get; set; }
+    
+    private void Start()
     {
         PlayerMovement.SetEnabled(IsLocal);
         
@@ -40,6 +46,19 @@ public class NetworkPlayer : MonoBehaviour
             
             m_UsernameText.text = Username.Value;
         });
+        
+        HostUsername.OnChange.AddListener(delegate
+        {
+            if (IsLocal && PhotonNetwork.IsMasterClient)
+                PhotonView.RPC(nameof(SetHostText), RpcTarget.OthersBuffered, HostUsername.Value);
+            
+            MainMenu.SetHostText(HostUsername.Value);
+        });
+
+        Username.Value = MainMenu.Username;
+        
+        if (IsLocal && PhotonNetwork.IsMasterClient)
+            HostUsername.Value = "You";
     }
 
     [PunRPC]
@@ -49,7 +68,20 @@ public class NetworkPlayer : MonoBehaviour
         if (PhotonView.Owner.Equals(player))
         {
             Debug.Log($"Set Player {PhotonView.Owner.ActorNumber}'s username to {username}");
+            
             Username.Value = username;
+        }
+    }
+    
+    [PunRPC]
+    [UsedImplicitly]
+    public void SetHostText(Player player, string hostUsername)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Set Host Text to {hostUsername}");
+            
+            HostUsername.Value = hostUsername;
         }
     }
 }
