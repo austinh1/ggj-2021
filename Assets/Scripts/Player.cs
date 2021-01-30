@@ -4,40 +4,48 @@ namespace DefaultNamespace
 {
     public class Player : MonoBehaviour
     {
-        private GhostMovement m_GhostMovement;
+        private GhostController m_GhostController;
 
-        private GhostMovement GhostMovement
+        private GhostController GhostController
         {
             get
             {
-                if (m_GhostMovement == null)
-                    m_GhostMovement = GetComponent<GhostMovement>();
+                if (m_GhostController == null)
+                    m_GhostController = GetComponent<GhostController>();
 
-                return m_GhostMovement;
+                return m_GhostController;
             }
         }
         
-        private HumanMovement m_HumanMovement;
+        private HumanController m_HumanController;
 
-        private HumanMovement HumanMovement
+        private HumanController HumanController
         {
             get
             {
-                if (m_HumanMovement == null)
-                    m_HumanMovement = GetComponent<HumanMovement>();
+                if (m_HumanController == null)
+                    m_HumanController = GetComponent<HumanController>();
 
-                return m_HumanMovement;
+                return m_HumanController;
             }
         }
         
         public void MakeIntoGhost()
         {
+            GhostController.SetEnabled(true);
+            HumanController.SetEnabled(false);
             
+            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
         }
 
-        public void MakeIntoPlayer()
+        public void MakeIntoHuman()
         {
-            
+            GetComponent<GhostController>().SetEnabled(false);
+            GetComponent<HumanController>().SetEnabled(true);
+
+            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
         }
 
     }

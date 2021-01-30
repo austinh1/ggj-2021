@@ -71,13 +71,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4,
-    type: 3}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.16, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -95,8 +94,10 @@ GameObject:
   - component: {fileID: 5141340416290213437}
   - component: {fileID: 7175493930654116563}
   - component: {fileID: 7125140303789033628}
+  - component: {fileID: 7288456587074117190}
+  - component: {fileID: 581583454530188713}
   m_Layer: 0
-  m_Name: HumanPrefab
+  m_Name: PlayerPrefab
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,4 +177,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3d9a5411d605340988c465c0c7711c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 206646260acc29f48b50c038c73af520, type: 3}
   speed: 7
+--- !u!114 &7288456587074117190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166896359368874340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6e09ab0bf6a5a429d59624e81caff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 74c44b5387ab8f74f8937228d4a7d44e, type: 3}
+  - {fileID: 21300000, guid: ac7dfba28e6c7994f9d06d720cf9e10b, type: 3}
+  speed: 5
+  dashSpeed: 10
+  dashCooldownSeconds: 3
+--- !u!114 &581583454530188713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166896359368874340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d5d9997a81429fa547ebae3b0920bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
 
-public class GhostMovement : MonoBehaviour, IPlayerMovement
+public class GhostController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
     private TimeSpan dashCooldown = new TimeSpan(0);
     private Vector2 dashDir;
     private float dashBoost = 0f;
+
+    public Sprite[] sprites;
 
     [Range(0.0f, 10.0f)]
     public float speed = 5f;
@@ -24,8 +26,8 @@ public class GhostMovement : MonoBehaviour, IPlayerMovement
     
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
+        float inputX = Input.GetAxis("Horizontal Ghost");
+        float inputY = Input.GetAxis("Vertical Ghost");
 
         rigidbody2D.velocity = new Vector2(speed * inputX, speed * inputY) + (new Vector2(dashBoost, dashBoost) * dashDir);
 

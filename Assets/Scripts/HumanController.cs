@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
 
-public class HumanMovement : MonoBehaviour, IPlayerMovement
+public class HumanController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
+
+    public Sprite[] sprites;
 
     [Range(0.0f, 10.0f)]
     public float speed = 7f;
@@ -15,8 +17,8 @@ public class HumanMovement : MonoBehaviour, IPlayerMovement
 
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
+        float inputX = Input.GetAxis("Horizontal Human");
+        float inputY = Input.GetAxis("Vertical Human");
 
         rigidbody2D.velocity = new Vector2(speed * inputX, speed * inputY);
     }
