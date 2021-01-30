@@ -82,12 +82,13 @@ public class PlayerController : MonoBehaviour
             HumanController.SetEnabled(false);
             PossessObject.enabled = true;
         }
+
+        var ghostSprite = transform.Find("GhostSprite").gameObject;
+        var humanSprite = transform.Find("HumanSprite").gameObject;
+        ghostSprite.SetActive(true);
+        humanSprite.SetActive(false);
         
-        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        Sprite randomSprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
-        
-        spriteRenderer.sprite = randomSprite;
-        PlayerSprite = randomSprite;
+        PlayerSprite = ghostSprite.GetComponent<SpriteRenderer>().sprite;
     }
 
     public void MakeIntoHuman()
@@ -98,11 +99,12 @@ public class PlayerController : MonoBehaviour
             HumanController.SetEnabled(true);
             PossessObject.enabled = false;    
         }
-        
-        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        Sprite randomSprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
 
-        spriteRenderer.sprite = randomSprite;
-        PlayerSprite = randomSprite;
+        var ghostSprite = transform.Find("GhostSprite").gameObject;
+        var humanSprite = transform.Find("HumanSprite").gameObject;
+        ghostSprite.SetActive(false);
+        humanSprite.SetActive(true);
+
+        PlayerSprite = humanSprite.GetComponent<SpriteRenderer>().sprite;
     }
 }
