@@ -52,6 +52,9 @@ public class PlayerController : MonoBehaviour
         HumanController.SetEnabled(true);
 
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
+        Sprite randomSprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
+
+        spriteRenderer.sprite = randomSprite;
+        PlayerSprite = randomSprite;
     }
 }
