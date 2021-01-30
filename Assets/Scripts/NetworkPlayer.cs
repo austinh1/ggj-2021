@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ public class NetworkPlayer : MonoBehaviour
         Username.OnChange.AddListener(delegate
         {
             if (IsLocal)
-                PhotonView.RPC(nameof(SetUsername), PhotonView.Owner, Username.Value);
+                PhotonView.RPC(nameof(SetUsername), RpcTarget.OthersBuffered, PhotonView.Owner, Username.Value);
             
             m_UsernameText.text = Username.Value;
         });
@@ -43,12 +44,12 @@ public class NetworkPlayer : MonoBehaviour
 
     [PunRPC]
     [UsedImplicitly]
-    public void SetUsername(string username)
+    public void SetUsername(Player player, string username)
     {
-        Username.Value = username;
-
-        // if (PhotonView.Owner.Equals(player))
-        // {
-        // }
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Set Player {PhotonView.Owner.ActorNumber}'s username to {username}");
+            Username.Value = username;
+        }
     }
 }
