@@ -29,8 +29,6 @@ public class NetworkPlayer : MonoBehaviour
 
     public Observable<string> Username { get; } = new Observable<string>();
     
-    public Observable<string> HostUsername { get; } = new Observable<string>();
-    
     private Game Game { get; set; }
     
     private MainMenu MainMenu { get; set; }
@@ -48,20 +46,7 @@ public class NetworkPlayer : MonoBehaviour
                 PhotonView.RPC(nameof(SetUsername), RpcTarget.OthersBuffered, PhotonView.Owner, Username.Value);
             
             m_UsernameText.text = Username.Value;
-        });
-        
-        HostUsername.OnChange.AddListener(delegate
-        {
-            if (IsLocal && PhotonNetwork.IsMasterClient)
-                PhotonView.RPC(nameof(SetHostText), RpcTarget.OthersBuffered, PhotonView.Owner, Username.Value);
-            
-            MainMenu.SetHostText(HostUsername.Value);
-        });
-
-        Username.Value = MainMenu.Username;
-        
-        if (IsLocal && PhotonNetwork.IsMasterClient)
-            HostUsername.Value = "You";
+        });        
     }
 
     [PunRPC]
@@ -73,18 +58,6 @@ public class NetworkPlayer : MonoBehaviour
             Debug.Log($"Set Player {PhotonView.Owner.ActorNumber}'s username to {username}");
             
             Username.Value = username;
-        }
-    }
-    
-    [PunRPC]
-    [UsedImplicitly]
-    public void SetHostText(Player player, string hostUsername)
-    {
-        if (PhotonView.Owner.Equals(player))
-        {
-            Debug.Log($"Set Host Text to {hostUsername}");
-            
-            HostUsername.Value = hostUsername;
         }
     }
 }
