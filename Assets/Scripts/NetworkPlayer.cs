@@ -46,7 +46,10 @@ public class NetworkPlayer : MonoBehaviour
                 PhotonView.RPC(nameof(SetUsername), RpcTarget.OthersBuffered, PhotonView.Owner, Username.Value);
             
             m_UsernameText.text = Username.Value;
-        });        
+        });
+
+        if (IsLocal)
+            Username.Value = MainMenu.Username;
     }
 
     [PunRPC]
