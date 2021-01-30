@@ -11,9 +11,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_InputField m_RoomCodeField;
     [SerializeField] private Button m_CreateButton;
     [SerializeField] private Button m_JoinButton;
+    [SerializeField] private Button m_LeaveButton;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
+    [SerializeField] private TMP_Text m_Connecting;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
 
     private string Username { get; set; }
@@ -45,6 +47,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
             m_PlayerCount.text = $"Player Count: {newInt}";
         });
         
+        m_LeaveButton.onClick.AddListener(delegate
+        {
+            PhotonNetwork.LeaveRoom();
+        });
+        
         PhotonNetwork.ConnectUsingSettings();
 
         void CreateRoom()
@@ -61,14 +68,16 @@ public class MainMenu : MonoBehaviourPunCallbacks
                 return;
             }
             
-            RoomCode.Value = m_RoomCodeField.text;
-            PhotonNetwork.JoinRoom(m_RoomCodeField.text);
+            RoomCode.Value = m_RoomCodeField.text.ToUpper();
+            PhotonNetwork.JoinRoom(RoomCode.Value);
         }
     }
     
     public override void OnConnectedToMaster()
     {
         Debug.Log("CONNECTED");
+        m_Connecting.gameObject.SetActive(false);
+        m_JoinOrCreateRoom.SetActive(true);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -79,24 +88,46 @@ public class MainMenu : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         Debug.Log($"Error joining room: {returnCode}, {message}");
-        m_Error.text = $"Failed to join room {m_RoomCodeField.text}!";
+        
+        m_Error.text = $"Couldn't find room {m_RoomCodeField.text}!";
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log($"Player {newPlayer.ActorNumber} joined!");
-
+        
         base.OnPlayerEnteredRoom(newPlayer);
+        PlayerCount.Value = PhotonNetwork.PlayerList.Length;
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Debug.Log($"Player {otherPlayer.ActorNumber} left :(");
+        base.OnPlayerLeftRoom(otherPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
     }
 
     public override void OnJoinedRoom()
     {
-        PlayerCount.Value = PhotonNetwork.PlayerList.Length;
-        m_JoinOrCreateRoom.gameObject.SetActive(false);
         Debug.Log($"Joined room {RoomCode.Value}");
+        
+        PlayerCount.Value = PhotonNetwork.PlayerList.Length;
+        m_JoinOrCreateRoom.SetActive(false);
+        m_LeaveButton.gameObject.SetActive(true);
     }
-    
+
+    public override void OnLeftRoom()
+    {
+        Debug.Log($"Left room {RoomCode.Value}");
+        
+        base.OnLeftRoom();
+        RoomCode.Value = string.Empty;
+        PlayerCount.Value = 0;
+        m_JoinOrCreateRoom.SetActive(true);
+        m_LeaveButton.gameObject.SetActive(false);
+        m_Error.text = string.Empty;
+    }
+
     private static string RandomString(int length)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
