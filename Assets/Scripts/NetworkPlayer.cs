@@ -50,7 +50,7 @@ public class NetworkPlayer : MonoBehaviour
         HostUsername.OnChange.AddListener(delegate
         {
             if (IsLocal && PhotonNetwork.IsMasterClient)
-                PhotonView.RPC(nameof(SetHostText), RpcTarget.OthersBuffered, HostUsername.Value);
+                PhotonView.RPC(nameof(SetHostText), RpcTarget.OthersBuffered, PhotonView.Owner, HostUsername.Value);
             
             MainMenu.SetHostText(HostUsername.Value);
         });
