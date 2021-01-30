@@ -116,4 +116,19 @@ public class NetworkPlayer : MonoBehaviour
             Player.MakeIntoGhost();
         }
     }
+
+    public void SendSetPositionMessage(Vector3 position)
+    {
+        PhotonView.RPC(nameof(SetPositionRPC), RpcTarget.All, PhotonView.Owner, position);
+    }
+    
+    [PunRPC]
+    public void SetPositionRPC(Player player, Vector3 position)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} was made into a ghost!");
+            transform.position = position;
+        }
+    }
 }

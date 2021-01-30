@@ -69,7 +69,10 @@ public class Game : MonoBehaviour
             var spawnPoint = m_GhostSpawnPoints[i];
             
             var ghostPhotonView = ghostPhotonViews[i];
-            ghostPhotonView.transform.position = spawnPoint.position;
+            var position = spawnPoint.position;
+            
+            var networkPlayer = ghostPhotonView.GetComponent<NetworkPlayer>();
+            networkPlayer.SendSetPositionMessage(position);
         }
     }
 

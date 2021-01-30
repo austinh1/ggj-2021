@@ -59,10 +59,10 @@ public class PlayerController : MonoBehaviour
     
     private bool IsLocal => PhotonView.IsMine;
 
-    public bool IsGhost => GhostController.enabled;
-    public bool IsHuman => HumanController.enabled;
+    public bool IsGhost { get; private set; } = true;
+    public bool IsHuman { get; private set; }
 
-    public Sprite PlayerSprite { get; set; }
+    public Sprite PlayerSprite { get; private set; }
 
     private void Start()
     {
@@ -76,6 +76,9 @@ public class PlayerController : MonoBehaviour
 
     public void MakeIntoGhost()
     {
+        IsGhost = true;
+        IsHuman = false;
+        
         if (IsLocal)
         {
             GhostController.SetEnabled(true);
@@ -93,6 +96,9 @@ public class PlayerController : MonoBehaviour
 
     public void MakeIntoHuman()
     {
+        IsGhost = false;
+        IsHuman = true;
+        
         if (IsLocal)
         {
             GhostController.SetEnabled(false);
