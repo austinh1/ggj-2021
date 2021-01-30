@@ -9,7 +9,7 @@ showPackageIndexes = false
 showStatusBar = false
 debounceMs = 250
 scopes = {
-	"last_search.B6046BBC" = "project setting"
+	"last_search.B6046BBC" = "package manager"
 	"asset.B6046BBC" = "True"
 	"menu.B6046BBC" = "True"
 	"scene.B6046BBC" = "True"
@@ -62,10 +62,11 @@ providers = {
 	}
 }
 recentSearches = [
+	"package manager"
+	"package"
 	"project setting"
 	"input manager"
 	"input"
 	"rewired"
-	"package manager"
 ]
 savedSearchesSortOrder = 0
