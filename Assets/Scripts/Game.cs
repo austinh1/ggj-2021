@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
-using DefaultNamespace;
 using Photon.Pun;
 using UnityEngine;
 
@@ -53,7 +52,7 @@ public class Game : MonoBehaviour
         SetGameStateToInProgress();
 
         var photonViews = PhotonNetwork.PhotonViews;
-        var humanPhotonView = photonViews.First(pv => pv.GetComponent<Player>() != null && pv.GetComponent<Player>().CurrentType == PlayerType.Human);
+        var humanPhotonView = photonViews.First(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().CurrentType == PlayerController.PlayerType.Human);
         humanPhotonView.transform.position = m_HumanSpawnPoint.position;
         
         

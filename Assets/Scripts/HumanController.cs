@@ -38,7 +38,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
     private void Slap()
     {
-        Player nearestPlayer = null;
+        PlayerController nearestPlayer = null;
         var closestDistance = float.PositiveInfinity;
         var players = GameObject.FindGameObjectsWithTag("Player");
         foreach (var player in players)
@@ -49,7 +49,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
                 continue;
             }
 
-            Player playerScript = player.GetComponent<Player>();
+            PlayerController playerScript = player.GetComponent<PlayerController>();
 
             float distanceFromPlayer = Vector3.Distance(player.transform.position, transform.position);
             if (playerScript.IsGhost && distanceFromPlayer <= Math.Min(closestDistance, slapRange))

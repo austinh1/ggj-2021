@@ -1,4 +1,3 @@
-using DefaultNamespace;
 using JetBrains.Annotations;
 using Photon.Pun;
 using UnityEngine;
@@ -114,7 +113,7 @@ public class PossessObject : MonoBehaviour
     
     [PunRPC]
     [UsedImplicitly]
-    public void PossessObjectRPC(Player player, int possessedObjectIndex)
+    public void PossessObjectRPC(PlayerController player, int possessedObjectIndex)
     {
         if (PhotonView.Owner.Equals(player))
         {
@@ -126,7 +125,7 @@ public class PossessObject : MonoBehaviour
     
     [PunRPC]
     [UsedImplicitly]
-    public void StopPossessObjectRPC(Player player, int possessedObjectIndex, Sprite originalSprite)
+    public void StopPossessObjectRPC(PlayerController player, int possessedObjectIndex, Sprite originalSprite)
     {
         if (PhotonView.Owner.Equals(player))
         {

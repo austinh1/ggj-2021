@@ -12,14 +12,14 @@ public class NetworkPlayer : MonoBehaviour
 
     private IPlayerMovement PlayerMovement => m_PlayerMovement ??= GetComponent<IPlayerMovement>();
     
-    private DefaultNamespace.Player m_Player;
+    private PlayerController m_Player;
 
-    public DefaultNamespace.Player Player
+    public PlayerController Player
     {
         get
         {
             if (m_Player == null)
-                m_Player = GetComponent<DefaultNamespace.Player>();
+                m_Player = GetComponent<PlayerController>();
 
             return m_Player;
         }
