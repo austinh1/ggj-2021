@@ -28,13 +28,15 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     {
         float inputX = Input.GetAxis("Horizontal Ghost");
         float inputY = Input.GetAxis("Vertical Ghost");
-
-        rigidbody2D.velocity = new Vector2(speed * inputX, speed * inputY) + (new Vector2(dashBoost, dashBoost) * dashDir);
+        
+        var boost = new Vector2(dashBoost, dashBoost) * dashDir;
+        var move = new Vector2(inputX, inputY).normalized * speed;
+        rigidbody2D.velocity = move + boost;
 
         // Only allow dashing while moving and it's not on cooldown
         if (Input.GetKeyDown(KeyCode.Space) && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
         {
-            dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY));
+            dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY)).normalized;
             dashBoost = dashSpeed;
             dashCooldown = new TimeSpan(0, 0, dashCooldownSeconds);
         }

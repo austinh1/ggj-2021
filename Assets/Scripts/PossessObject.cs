@@ -116,19 +116,6 @@ public class PossessObject : MonoBehaviour
     
     [PunRPC]
     [UsedImplicitly]
-    public void HighlightObjRPC(Player player)
-    {
-        if (!PhotonView.Owner.Equals(player)) return;
-
-        foreach (var possessionObject in PossessionManager.instance._possessionObjects)
-        {
-            possessionObject.SpriteRenderer.color = possessionObject == NearestPossessionObject ? Color.red : Color.white;
-        }
-    }
-    
-    
-    [PunRPC]
-    [UsedImplicitly]
     public void PossessObjectRPC(Player player, int possessedObjectIndex)
     {
         if (!PhotonView.Owner.Equals(player)) return;
