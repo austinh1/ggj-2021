@@ -6,6 +6,7 @@ public class Game : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera m_CinemachineVirtualCamera;
     [SerializeField] private Camera m_Camera;
+    [SerializeField] private MainMenu m_MainMenu;
 
     private GameState CurrentState { get; set; }
 
@@ -13,9 +14,10 @@ public class Game : MonoBehaviour
     {
         CurrentState = GameState.Setup;
         
-        var fighter = PhotonNetwork.Instantiate("PlayerPrefab Austin", Vector2.zero, Quaternion.identity);
-        m_CinemachineVirtualCamera.Follow = fighter.transform;
+        var networkPlayer = PhotonNetwork.Instantiate("PlayerPrefab Austin", Vector2.zero, Quaternion.identity).GetComponent<NetworkPlayer>();
+        m_CinemachineVirtualCamera.Follow = networkPlayer.transform;
         m_Camera.transform.position = Vector3.zero;
+        networkPlayer.Username.Value = m_MainMenu.Username;
     }
 
     public void LeaveRoom()

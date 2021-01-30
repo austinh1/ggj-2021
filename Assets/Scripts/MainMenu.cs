@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
-    private Observable<string> Username { get; set; }
+    public string Username { get; set; }
 
     private Observable<string> RoomCode { get; } = new Observable<string>();
 
@@ -88,7 +88,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
                 return false;
             }
 
-            Username.Value = m_UsernameField.text;
+            Username = m_UsernameField.text;
             return true;
         }
     }

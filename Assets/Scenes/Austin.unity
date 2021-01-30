@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 445048767}
   - component: {fileID: 445048771}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Main Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,7 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RoomCodeField: {fileID: 702585290}
-  m_UsernameField: {fileID: 0}
+  m_UsernameField: {fileID: 112050712}
   m_CreateButton: {fileID: 296956087}
   m_JoinButton: {fileID: 796543731}
   m_LeaveButton: {fileID: 1899498350}
@@ -1320,7 +1320,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &590521388
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2180,6 +2180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CinemachineVirtualCamera: {fileID: 1928720471}
   m_Camera: {fileID: 338514218}
+  m_MainMenu: {fileID: 445048771}
 --- !u!4 &1086179444
 Transform:
   m_ObjectHideFlags: 0
