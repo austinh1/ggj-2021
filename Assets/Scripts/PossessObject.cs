@@ -64,7 +64,7 @@ public class PossessObject : MonoBehaviour
                 possessionObject.SpriteRenderer.color = Color.white;
 
             if(NearestPossessionObject != null)
-                NearestPossessionObject.SpriteRenderer.color = Color.red;
+                NearestPossessionObject.SpriteRenderer.color = Color.cyan;
         }
     }
 
