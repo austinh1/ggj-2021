@@ -28,17 +28,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private PossessObject m_PossessObject;
+
+    private PossessObject PossessObject
+    {
+        get
+        {
+            if (m_PossessObject == null)
+                m_PossessObject = GetComponent<PossessObject>();
+
+            return m_PossessObject;
+        }
+    }
 
     public bool IsGhost => GhostController.enabled;
     public bool IsHuman => HumanController.enabled;
 
-    public Sprite PlayerSprite;
+    public Sprite PlayerSprite { get; set; }
 
     public void MakeIntoGhost()
     {
         GhostController.SetEnabled(true);
         HumanController.SetEnabled(false);
-            
+        PossessObject.enabled = true;
+
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         Sprite randomSprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
         
@@ -50,7 +63,8 @@ public class PlayerController : MonoBehaviour
     {
         GhostController.SetEnabled(false);
         HumanController.SetEnabled(true);
-
+        PossessObject.enabled = false;
+        
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
     }
