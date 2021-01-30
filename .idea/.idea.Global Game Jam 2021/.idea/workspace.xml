@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="775fb3b5-b883-435a-a6a4-07c65845e392" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/PlayerPrefab Brendan.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PlayerPrefab Brendan.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PossessObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PossessObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Austin.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Austin.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +21,9 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scenes/Austin.unity" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scenes/Austin.unity" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/Player.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -87,7 +86,7 @@
       <workItem from="1611962016896" duration="871000" />
       <workItem from="1611963335604" duration="352000" />
       <workItem from="1612032994570" duration="2319000" />
-      <workItem from="1612035378206" duration="1022000" />
+      <workItem from="1612035378206" duration="1341000" />
     </task>
     <task id="LOCAL-00001" summary="- Started networking the possession code">
       <created>1612035058701</created>
@@ -96,7 +95,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612035058701</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="- updated austin's scene with possession networking">
+      <created>1612036542164</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1612036542164</updated>
+    </task>
+    <task id="LOCAL-00003" summary="- updated austin's scene with possession networking">
+      <created>1612036555895</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1612036555895</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,7 +132,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="- Started networking the possession code" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Started networking the possession code" />
+    <MESSAGE value="- updated austin's scene with possession networking" />
+    <option name="LAST_COMMIT_MESSAGE" value="- updated austin's scene with possession networking" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

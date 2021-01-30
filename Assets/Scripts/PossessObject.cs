@@ -48,7 +48,7 @@ public class PossessObject : MonoBehaviour
     {
         NearestPossessionObject = null;
         var closestDistance = 100f;
-        foreach (var possessionObject in PossessionManager.instance.PossessionObjects)
+        foreach (var possessionObject in PossessionManager.instance._possessionObjects)
         {
             float distanceFromPlayer = Vector3.Distance(possessionObject.transform.position, transform.position);
 
@@ -58,7 +58,7 @@ public class PossessObject : MonoBehaviour
             NearestPossessionObject = possessionObject;
         }
 
-        foreach (var possessionObject in PossessionManager.instance.PossessionObjects)
+        foreach (var possessionObject in PossessionManager.instance._possessionObjects)
         {
             if(possessionObject != NearestPossessionObject)
                 possessionObject.SpriteRenderer.color = Color.white;
@@ -101,7 +101,7 @@ public class PossessObject : MonoBehaviour
 
     private void PossessNearestObject()
     {
-        PossessedObjectIndex = PossessionManager.instance.PossessionObjects.IndexOf(CurrentPossessionObject);
+        PossessedObjectIndex = PossessionManager.instance._possessionObjects.IndexOf(CurrentPossessionObject);
         CurrentPossessionObject = NearestPossessionObject;
         NearestPossessionObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = CurrentPossessionObject.SpriteRenderer.sprite;
@@ -118,7 +118,7 @@ public class PossessObject : MonoBehaviour
     {
         if (PhotonView.Owner.Equals(player))
         {
-            PossessionObject pObject = PossessionManager.instance.PossessionObjects[possessedObjectIndex];
+            PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
             pObject.SpriteRenderer.enabled = false;
             PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
         }
@@ -130,7 +130,7 @@ public class PossessObject : MonoBehaviour
     {
         if (PhotonView.Owner.Equals(player))
         {
-            PossessionObject pObject = PossessionManager.instance.PossessionObjects[possessedObjectIndex];
+            PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
             pObject.transform.position = transform.position;
             pObject.SpriteRenderer.enabled = true;
             PlayerSprite.sprite = GetComponent<PlayerController>().PlayerSprite;

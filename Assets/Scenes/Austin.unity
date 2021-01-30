@@ -3333,46 +3333,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[2]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[4]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[5]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4675182335958081335, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
-        type: 3}
-      propertyPath: PossessionObjects.Array.data[6]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5509226414282119097, guid: 1ff248fa69e1b884090c6ebcb8d6e9ec,
         type: 3}
       propertyPath: viewIdField

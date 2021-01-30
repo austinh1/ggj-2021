@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce3b9a548c14affbd05f40bfa9d481e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PossessionObjects:
+  _possessionObjects:
   - {fileID: 8796508725794607953}
   - {fileID: 8796508727796532189}
   - {fileID: 8796508727386309145}
@@ -52,7 +52,6 @@ MonoBehaviour:
   - {fileID: 8796508725841752908}
   - {fileID: 8796508725850968069}
   - {fileID: 8796508726565644048}
-  PossessionObjectParent: {fileID: 0}
 --- !u!1001 &759888875613923758
 PrefabInstance:
   m_ObjectHideFlags: 0
