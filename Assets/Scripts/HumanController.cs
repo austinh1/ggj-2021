@@ -11,7 +11,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     public float speed = 7f;
 
     [Range(0.0f, 10.0f)]
-    public float slapRange = 3f;
+    public float slapRange = 2f;
 
     private void Start()
     {
@@ -38,6 +38,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
     private void Slap()
     {
+        Debug.Log("Attempt slap...");
         PlayerController nearestPlayer = null;
         var closestDistance = float.PositiveInfinity;
         var players = GameObject.FindGameObjectsWithTag("Player");
@@ -62,7 +63,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         if (nearestPlayer != null)
         {
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
-            Debug.Log(String.Format("You slapped {0}!", netPlayer.Username));
+            Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
             nearestPlayer.MakeIntoHuman();
         }
     }

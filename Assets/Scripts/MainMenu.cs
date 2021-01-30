@@ -69,9 +69,16 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             if (!ValidateUsername())
                 return;
-                
-            RoomCode.Value = RandomString(4);
-            PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions());
+
+            // Generate a random string and attempt to make room a few times, to greatly reduce the risk of random string collisions causing a failed room create.
+            bool success = false;
+            int attempt = 0;
+            do
+            {
+                RoomCode.Value = RandomString(4);
+                success = PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions());
+                attempt++;
+            } while (!success && attempt < 5);
         }
 
         void JoinRoom()
@@ -167,7 +174,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     
     private static string RandomString(int length)
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[Random.Next(s.Length)]).ToArray());
     }

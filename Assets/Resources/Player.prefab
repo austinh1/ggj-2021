@@ -435,7 +435,7 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300000, guid: 206646260acc29f48b50c038c73af520, type: 3}
   speed: 7
-  slapRange: 3
+  slapRange: 2
 --- !u!114 &3209926602289484202
 MonoBehaviour:
   m_ObjectHideFlags: 0
