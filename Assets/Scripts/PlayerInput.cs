@@ -1,10 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Rigidbody2D rigidbody2D;
     public Vector2 speed = new Vector2(10, 10);
+
+    private void Start()
+    {
+        rigidbody2D = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
@@ -16,5 +21,7 @@ public class PlayerMovement : MonoBehaviour
         movement *= Time.deltaTime;
 
         transform.Translate(movement);
+        
+        // rigidbody2D.velocity = new Vector2(123, 123);
     }
 }
