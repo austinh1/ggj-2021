@@ -17,7 +17,8 @@ public class Game : MonoBehaviour
         var networkPlayer = PhotonNetwork.Instantiate("PlayerPrefab Austin", Vector2.zero, Quaternion.identity).GetComponent<NetworkPlayer>();
         m_CinemachineVirtualCamera.Follow = networkPlayer.transform;
         m_Camera.transform.position = Vector3.zero;
-        networkPlayer.Username.Value = m_MainMenu.Username;
+        networkPlayer.MainMenu = m_MainMenu;
+        networkPlayer.Game = this;
     }
 
     public void LeaveRoom()
@@ -25,8 +26,8 @@ public class Game : MonoBehaviour
         CurrentState = GameState.Lobby;
         m_Camera.transform.position = Vector3.zero;
     }
-    
-    public enum GameState
+
+    private enum GameState
     {
         Lobby,
         Setup,

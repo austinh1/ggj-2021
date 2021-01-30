@@ -17,16 +17,19 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
     [SerializeField] private TMP_Text m_Connecting;
+    [SerializeField] private TMP_Text m_HostUsername;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
-    public string Username { get; set; }
+    public string Username { get; private set; }
 
     private Observable<string> RoomCode { get; } = new Observable<string>();
 
     private Observable<int> PlayerCount { get; } = new Observable<int>();
     
     private static Random Random { get; } = new Random();
+    
+    public NetworkPlayer NetworkPlayer { get; set; }
     
     private void Start()
     {
@@ -157,5 +160,19 @@ public class MainMenu : MonoBehaviourPunCallbacks
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[Random.Next(s.Length)]).ToArray());
+    }
+
+    public void SetHostText(string hostUsername)
+    {
+        m_HostUsername.text = $"Host: {hostUsername}";
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        Debug.Log($"Master client switched to player {newMasterClient.ActorNumber}, username: {NetworkPlayer.Username.Value}");
+        base.OnMasterClientSwitched(newMasterClient);
+
+        if (PhotonNetwork.IsMasterClient)
+            NetworkPlayer.HostUsername.Value = NetworkPlayer.Username.Value;
     }
 }
