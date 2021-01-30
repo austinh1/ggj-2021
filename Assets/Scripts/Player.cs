@@ -4,6 +4,8 @@ namespace DefaultNamespace
 {
     public class Player : MonoBehaviour
     {
+        public PlayerType CurrentType { get; set; }
+        
         private GhostController m_GhostController;
 
         private GhostController GhostController
@@ -32,6 +34,8 @@ namespace DefaultNamespace
         
         public void MakeIntoGhost()
         {
+            CurrentType = PlayerType.Ghost;
+            
             GhostController.SetEnabled(true);
             HumanController.SetEnabled(false);
             
@@ -41,6 +45,8 @@ namespace DefaultNamespace
 
         public void MakeIntoHuman()
         {
+            CurrentType = PlayerType.Human;
+            
             GetComponent<GhostController>().SetEnabled(false);
             GetComponent<HumanController>().SetEnabled(true);
 
@@ -48,5 +54,11 @@ namespace DefaultNamespace
             spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
         }
 
+    }
+
+    public enum PlayerType
+    {
+        Ghost,
+        Human
     }
 }

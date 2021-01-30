@@ -11,6 +11,19 @@ public class NetworkPlayer : MonoBehaviour
     private IPlayerMovement m_PlayerMovement;
 
     private IPlayerMovement PlayerMovement => m_PlayerMovement ??= GetComponent<IPlayerMovement>();
+    
+    private DefaultNamespace.Player m_Player;
+
+    public DefaultNamespace.Player Player
+    {
+        get
+        {
+            if (m_Player == null)
+                m_Player = GetComponent<DefaultNamespace.Player>();
+
+            return m_Player;
+        }
+    }
 
     private PhotonView m_PhotonView;
 
@@ -61,6 +74,21 @@ public class NetworkPlayer : MonoBehaviour
             Debug.Log($"Set Player {PhotonView.Owner.ActorNumber}'s username to {username}");
             
             Username.Value = username;
+        }
+    }
+
+    public void SendStartGameMessage()
+    {
+        PhotonView.RPC(nameof(StartGame), RpcTarget.OthersBuffered, PhotonView.Owner);
+    }
+
+    [PunRPC]
+    public void StartGame(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} started the game!");
+            Game.SetGameStateToInProgress();
         }
     }
 }

@@ -38,6 +38,7 @@ MonoBehaviour:
   - RespawnSpaceship
   - SetUsername
   - SetHostText
+  - StartGame
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

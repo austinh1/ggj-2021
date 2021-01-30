@@ -13,6 +13,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_CreateButton;
     [SerializeField] private Button m_JoinButton;
     [SerializeField] private Button m_LeaveButton;
+    [SerializeField] private Button m_StartButton;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
@@ -54,6 +55,12 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_LeaveButton.onClick.AddListener(delegate
         {
             PhotonNetwork.LeaveRoom();
+        });
+        
+        m_StartButton.onClick.AddListener(delegate
+        {
+            m_StartButton.gameObject.SetActive(false);
+            m_Game.StartGameMaster();
         });
         
         PhotonNetwork.ConnectUsingSettings();
@@ -137,6 +144,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(false);
         m_LeaveButton.gameObject.SetActive(true);
         
+        if (PhotonNetwork.IsMasterClient)
+            m_StartButton.gameObject.SetActive(true);
+        
         m_Game.JoinRoom();
     }
 
@@ -153,7 +163,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         
         m_Game.LeaveRoom();
     }
-
+    
     private static string RandomString(int length)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
