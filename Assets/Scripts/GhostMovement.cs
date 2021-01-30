@@ -37,7 +37,6 @@ public class GhostMovement : MonoBehaviour, IPlayerMovement
         // Only allow dashing while moving and it's not on cooldown
         if (Input.GetKeyDown("space") && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
         {
-            Debug.Log("Dash");
             dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY));
             dashBoost = dashSpeed;
             dashCooldown = new TimeSpan(0, 0, dashCooldownSeconds);
