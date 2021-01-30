@@ -41,6 +41,10 @@ MonoBehaviour:
   - PossessObjectRPC
   - StopPossessObjectRPC
   - StartGame
+  - MakeIntoGhostRPC
+  - MakeIntoHumanRPC
+  - SetUsernameRPC
+  - StartGameRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
