@@ -26,9 +26,9 @@ public class Game : MonoBehaviour
         m_Camera.transform.position = Vector3.zero;
 
         if (PhotonNetwork.IsMasterClient)
-            NetworkPlayer.Player.MakeIntoHuman();
+            NetworkPlayer.MakeIntoHuman();
         else
-            NetworkPlayer.Player.MakeIntoGhost();
+            NetworkPlayer.MakeIntoGhost();
             
     }
 

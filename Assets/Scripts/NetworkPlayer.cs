@@ -56,7 +56,7 @@ public class NetworkPlayer : MonoBehaviour
         Username.OnChange.AddListener(delegate
         {
             if (IsLocal)
-                PhotonView.RPC(nameof(SetUsername), RpcTarget.OthersBuffered, PhotonView.Owner, Username.Value);
+                PhotonView.RPC(nameof(SetUsernameRPC), RpcTarget.OthersBuffered, PhotonView.Owner, Username.Value);
             
             m_UsernameText.text = Username.Value;
         });
@@ -67,7 +67,7 @@ public class NetworkPlayer : MonoBehaviour
 
     [PunRPC]
     [UsedImplicitly]
-    public void SetUsername(Player player, string username)
+    public void SetUsernameRPC(Player player, string username)
     {
         if (PhotonView.Owner.Equals(player))
         {
@@ -79,16 +79,46 @@ public class NetworkPlayer : MonoBehaviour
 
     public void SendStartGameMessage()
     {
-        PhotonView.RPC(nameof(StartGame), RpcTarget.OthersBuffered, PhotonView.Owner);
+        PhotonView.RPC(nameof(StartGameRPC), RpcTarget.OthersBuffered, PhotonView.Owner);
     }
 
     [PunRPC]
-    public void StartGame(Player player)
+    public void StartGameRPC(Player player)
     {
         if (PhotonView.Owner.Equals(player))
         {
             Debug.Log($"Player {player.ActorNumber} started the game!");
             Game.SetGameStateToInProgress();
+        }
+    }
+
+    public void MakeIntoHuman()
+    {
+        PhotonView.RPC(nameof(MakeIntoHumanRPC), RpcTarget.AllBuffered, PhotonView.Owner, Username.Value);
+    }
+
+    [PunRPC]
+    public void MakeIntoHumanRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} was made into a human!");
+            Player.MakeIntoHuman();
+        }
+    }
+    
+    public void MakeIntoGhost()
+    {
+        PhotonView.RPC(nameof(MakeIntoGhostRPC), RpcTarget.AllBuffered, PhotonView.Owner, Username.Value);
+    }
+
+    [PunRPC]
+    public void MakeIntoGhostRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} was made into a ghost!");
+            Player.MakeIntoGhost();
         }
     }
 }
