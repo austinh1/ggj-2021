@@ -1,52 +1,53 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace
+public class Player : MonoBehaviour
 {
-    public class Player : MonoBehaviour
+    private GhostController m_GhostController;
+
+    private GhostController GhostController
     {
-        private GhostController m_GhostController;
-
-        private GhostController GhostController
+        get
         {
-            get
-            {
-                if (m_GhostController == null)
-                    m_GhostController = GetComponent<GhostController>();
+            if (m_GhostController == null)
+                m_GhostController = GetComponent<GhostController>();
 
-                return m_GhostController;
-            }
+            return m_GhostController;
         }
+    }
         
-        private HumanController m_HumanController;
+    private HumanController m_HumanController;
 
-        private HumanController HumanController
+    private HumanController HumanController
+    {
+        get
         {
-            get
-            {
-                if (m_HumanController == null)
-                    m_HumanController = GetComponent<HumanController>();
+            if (m_HumanController == null)
+                m_HumanController = GetComponent<HumanController>();
 
-                return m_HumanController;
-            }
+            return m_HumanController;
         }
-        
-        public void MakeIntoGhost()
-        {
-            GhostController.SetEnabled(true);
-            HumanController.SetEnabled(false);
+    }
+
+
+    public bool IsGhost { get { return GhostController.enabled; } }
+    public bool IsHuman { get { return HumanController.enabled; } }
+
+
+    public void MakeIntoGhost()
+    {
+        GhostController.SetEnabled(true);
+        HumanController.SetEnabled(false);
             
-            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
-        }
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
+    }
 
-        public void MakeIntoHuman()
-        {
-            GetComponent<GhostController>().SetEnabled(false);
-            GetComponent<HumanController>().SetEnabled(true);
+    public void MakeIntoHuman()
+    {
+        GhostController.SetEnabled(false);
+        HumanController.SetEnabled(true);
 
-            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
-        }
-
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
     }
 }

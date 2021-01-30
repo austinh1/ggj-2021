@@ -32,7 +32,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         rigidbody2D.velocity = new Vector2(speed * inputX, speed * inputY) + (new Vector2(dashBoost, dashBoost) * dashDir);
 
         // Only allow dashing while moving and it's not on cooldown
-        if (Input.GetKeyDown("space") && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
+        if (Input.GetKeyDown(KeyCode.Space) && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
         {
             dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY));
             dashBoost = dashSpeed;
