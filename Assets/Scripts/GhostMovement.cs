@@ -24,11 +24,6 @@ public class GhostMovement : MonoBehaviour, IPlayerMovement
     
     void Update()
     {
-        if (dashCooldown > TimeSpan.Zero)
-        {
-            dashCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
-        }
-
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
 
@@ -41,11 +36,20 @@ public class GhostMovement : MonoBehaviour, IPlayerMovement
             dashBoost = dashSpeed;
             dashCooldown = new TimeSpan(0, 0, dashCooldownSeconds);
         }
-
+        
         // Decelerate dash
         if (dashBoost > 0)
         {
-            dashBoost -= 0.05f;
+            dashBoost -= dashSpeed * Time.deltaTime;
+        }
+        else
+        {
+            dashBoost = 0f;
+        }
+        
+        if (dashCooldown > TimeSpan.Zero)
+        {
+            dashCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
         }
     }
 
