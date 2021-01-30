@@ -261,13 +261,16 @@ GameObject:
   m_Component:
   - component: {fileID: 3655090120623108197}
   - component: {fileID: -8545165913804969048}
-  - component: {fileID: 927864328281325385}
   - component: {fileID: 678088019165708453}
   - component: {fileID: 6809338611396414802}
   - component: {fileID: 7866012486907073145}
   - component: {fileID: 3878956893228782360}
+  - component: {fileID: 7586407947544462918}
+  - component: {fileID: 927864328281325385}
+  - component: {fileID: 8207299999248462735}
+  - component: {fileID: 3209926602289484202}
   m_Layer: 0
-  m_Name: PlayerPrefab Austin
+  m_Name: PlayerPrefab Brendan
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -302,21 +305,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UsernameText: {fileID: 1644011350257972555}
---- !u!114 &927864328281325385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4576403402307490587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae6e09ab0bf6a5a429d59624e81caff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  dashSpeed: 10
-  dashCooldownSeconds: 3
 --- !u!114 &678088019165708453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,3 +390,62 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7586407947544462918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4576403402307490587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d68db13c6e20cd04e9b0df038e14aea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &927864328281325385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4576403402307490587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6e09ab0bf6a5a429d59624e81caff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 74c44b5387ab8f74f8937228d4a7d44e, type: 3}
+  - {fileID: 21300000, guid: ac7dfba28e6c7994f9d06d720cf9e10b, type: 3}
+  speed: 5
+  dashSpeed: 10
+  dashCooldownSeconds: 3
+--- !u!114 &8207299999248462735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4576403402307490587}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3d9a5411d605340988c465c0c7711c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: 206646260acc29f48b50c038c73af520, type: 3}
+  speed: 7
+  slapRange: 3
+--- !u!114 &3209926602289484202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4576403402307490587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d5d9997a81429fa547ebae3b0920bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerSprite: {fileID: 0}
