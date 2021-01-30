@@ -11,7 +11,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     public float speed = 7f;
 
     [Range(0.0f, 10.0f)]
-    public int slapRange = 3f;
+    public float slapRange = 3f;
 
     private void Start()
     {
