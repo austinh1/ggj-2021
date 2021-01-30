@@ -25,10 +25,10 @@ public class PossessObject : MonoBehaviour
         OriginalSprite = PlayerSprite.sprite;
     }
 
-    public void CheckForPossessionObjects()
+    private void CheckForPossessionObjects()
     {
         NearestPossessionObject = null;
-        float closestDistance = 100f;
+        var closestDistance = 100f;
         foreach (var possessionObject in PossessionManager.instance.PossessionObjects)
         {
             float distanceFromPlayer = Vector3.Distance(possessionObject.transform.position, transform.position);
@@ -38,25 +38,32 @@ public class PossessObject : MonoBehaviour
             closestDistance = distanceFromPlayer;
             NearestPossessionObject = possessionObject;
         }
+
+        foreach (var possessionObject in PossessionManager.instance.PossessionObjects)
+        {
+            if(possessionObject != NearestPossessionObject)
+                possessionObject.SpriteRenderer.color = Color.white;
+            else
+                NearestPossessionObject.SpriteRenderer.color = Color.cyan;
+        }
     }
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            if (!IsPossessing)
-            {
-                CheckForPossessionObjects();
+        if(!IsPossessing) CheckForPossessionObjects();
 
-                if (NearestPossessionObject != null)
-                {
-                    PossessNearestObject();
-                }
-            }
-            else
+        if (!Input.GetKeyDown(KeyCode.LeftShift)) return;
+
+        if (!IsPossessing)
+        {
+            if (NearestPossessionObject != null)
             {
-                StopPossessing();
+                PossessNearestObject();
             }
+        }
+        else
+        {
+            StopPossessing();
         }
     }
 
