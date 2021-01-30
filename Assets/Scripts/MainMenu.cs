@@ -159,6 +159,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         PlayerCount.Value = 0;
         m_JoinOrCreateRoom.SetActive(true);
         m_LeaveButton.gameObject.SetActive(false);
+        m_StartButton.gameObject.SetActive(false);
         m_Error.text = string.Empty;
         
         m_Game.LeaveRoom();
