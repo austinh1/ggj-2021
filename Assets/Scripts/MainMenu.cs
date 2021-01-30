@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text m_PlayerCount;
     [SerializeField] private TMP_Text m_Connecting;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
+    [SerializeField] private Game m_Game;
 
     private string Username { get; set; }
 
@@ -114,6 +115,8 @@ public class MainMenu : MonoBehaviourPunCallbacks
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
         m_JoinOrCreateRoom.SetActive(false);
         m_LeaveButton.gameObject.SetActive(true);
+        
+        m_Game.JoinRoom();
     }
 
     public override void OnLeftRoom()
@@ -126,6 +129,8 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(true);
         m_LeaveButton.gameObject.SetActive(false);
         m_Error.text = string.Empty;
+        
+        m_Game.LeaveRoom();
     }
 
     private static string RandomString(int length)
