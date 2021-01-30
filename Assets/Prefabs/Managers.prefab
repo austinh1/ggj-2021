@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce3b9a548c14affbd05f40bfa9d481e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PossessionObjects:
+  _possessionObjects:
   - {fileID: 8796508725794607953}
   - {fileID: 8796508727796532189}
   - {fileID: 8796508727386309145}
@@ -52,7 +52,6 @@ MonoBehaviour:
   - {fileID: 8796508725841752908}
   - {fileID: 8796508725850968069}
   - {fileID: 8796508726565644048}
-  PossessionObjectParent: {fileID: 8796508727355962285}
 --- !u!1001 &759888875613923758
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,12 +156,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf4b8b4bbe50e76418429af2a21701b2, type: 3}
---- !u!1 &8796508727355962285 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8113464513318214147, guid: cf4b8b4bbe50e76418429af2a21701b2,
-    type: 3}
-  m_PrefabInstance: {fileID: 759888875613923758}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8796508727355962284 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8113464513318214146, guid: cf4b8b4bbe50e76418429af2a21701b2,
