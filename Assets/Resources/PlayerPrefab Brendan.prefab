@@ -315,6 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6e09ab0bf6a5a429d59624e81caff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprites: []
   speed: 5
   dashSpeed: 10
   dashCooldownSeconds: 3
