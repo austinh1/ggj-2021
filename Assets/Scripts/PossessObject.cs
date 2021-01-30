@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class PossessObject : MonoBehaviour
@@ -93,7 +94,7 @@ public class PossessObject : MonoBehaviour
         IsPossessing = false;
         
         if (IsLocal)
-            PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex, OriginalSprite);
+            PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
 
         PossessedObjectIndex = -1;
     }
@@ -113,7 +114,7 @@ public class PossessObject : MonoBehaviour
     
     [PunRPC]
     [UsedImplicitly]
-    public void PossessObjectRPC(PlayerController player, int possessedObjectIndex)
+    public void PossessObjectRPC(Player player, int possessedObjectIndex)
     {
         if (PhotonView.Owner.Equals(player))
         {
@@ -125,14 +126,14 @@ public class PossessObject : MonoBehaviour
     
     [PunRPC]
     [UsedImplicitly]
-    public void StopPossessObjectRPC(PlayerController player, int possessedObjectIndex, Sprite originalSprite)
+    public void StopPossessObjectRPC(Player player, int possessedObjectIndex)
     {
         if (PhotonView.Owner.Equals(player))
         {
             PossessionObject pObject = PossessionManager.instance.PossessionObjects[possessedObjectIndex];
-            pObject.transform.position = player.transform.position;
+            pObject.transform.position = transform.position;
             pObject.SpriteRenderer.enabled = true;
-            PlayerSprite.sprite = originalSprite;
+            PlayerSprite.sprite = GetComponent<PlayerController>().PlayerSprite;
         }
     }
     

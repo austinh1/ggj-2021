@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGhost => GhostController.enabled;
     public bool IsHuman => HumanController.enabled;
 
+    public Sprite PlayerSprite;
 
     public void MakeIntoGhost()
     {
@@ -48,6 +49,8 @@ public class PlayerController : MonoBehaviour
         HumanController.SetEnabled(true);
 
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
+        Sprite randomSprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
+        spriteRenderer.sprite = randomSprite;
+        PlayerSprite = randomSprite;
     }
 }
