@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -7,10 +8,6 @@ using UnityEngine;
 public class NetworkPlayer : MonoBehaviour
 {
     [SerializeField] private TMP_Text m_UsernameText;
-    
-    private IPlayerMovement m_PlayerMovement;
-
-    private IPlayerMovement PlayerMovement => m_PlayerMovement ??= GetComponent<IPlayerMovement>();
     
     private PlayerController m_Player;
 
@@ -50,8 +47,6 @@ public class NetworkPlayer : MonoBehaviour
     {
         Game = FindObjectOfType<Game>();
         MainMenu = FindObjectOfType<MainMenu>();
-        
-        PlayerMovement.SetEnabled(IsLocal);
         
         Username.OnChange.AddListener(delegate
         {
