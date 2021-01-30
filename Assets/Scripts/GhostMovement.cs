@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class GhostMovement : MonoBehaviour
+public class GhostMovement : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
     public Vector2 speed = new Vector2(10, 10);
@@ -17,5 +17,10 @@ public class GhostMovement : MonoBehaviour
         float inputY = Input.GetAxis("Vertical");
 
         rigidbody2D.velocity = new Vector2(speed.x * inputX, speed.y * inputY);
+    }
+
+    public void SetEnabled(bool value)
+    {
+        enabled = value;
     }
 }

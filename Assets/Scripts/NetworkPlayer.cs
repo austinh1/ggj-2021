@@ -3,19 +3,10 @@ using UnityEngine;
 
 public class NetworkPlayer : MonoBehaviour
 {
-    private GhostMovement m_GhostMovement;
+    private IPlayerMovement m_PlayerMovement;
 
-    private GhostMovement GhostMovement
-    {
-        get
-        {
-            if (m_GhostMovement == null)
-                m_GhostMovement = GetComponent<GhostMovement>();
+    private IPlayerMovement PlayerMovement => m_PlayerMovement ??= GetComponent<IPlayerMovement>();
 
-            return m_GhostMovement;
-        }
-    }
-    
     private PhotonView m_PhotonView;
 
     private PhotonView PhotonView
@@ -33,6 +24,6 @@ public class NetworkPlayer : MonoBehaviour
 
     private void Awake()
     {
-        GhostMovement.enabled = IsLocal;
+        PlayerMovement.SetEnabled(IsLocal);
     }
 }
