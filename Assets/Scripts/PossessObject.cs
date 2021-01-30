@@ -6,7 +6,7 @@ public class PossessObject : MonoBehaviour
     private PossessionObject CurrentPossessionObject { get; set; }
     private Sprite OriginalSprite { get; set; }
     private bool IsPossessing { get; set; }
-    private float MinPossessionDistance { get; set; } = 1f;
+    private float MinPossessionDistance { get; } = 1f;
 
     private SpriteRenderer _playerSprite;
 

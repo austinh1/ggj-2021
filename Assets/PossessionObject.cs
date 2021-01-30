@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class PossessionObject : MonoBehaviour
@@ -13,11 +12,5 @@ public class PossessionObject : MonoBehaviour
 
             return _spriteRenderer;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
