@@ -9,6 +9,7 @@ using Random = System.Random;
 public class MainMenu : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_InputField m_RoomCodeField;
+    [SerializeField] private TMP_InputField m_UsernameField;
     [SerializeField] private Button m_CreateButton;
     [SerializeField] private Button m_JoinButton;
     [SerializeField] private Button m_LeaveButton;
@@ -19,7 +20,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
-    private string Username { get; set; }
+    private Observable<string> Username { get; set; }
 
     private Observable<string> RoomCode { get; } = new Observable<string>();
 
@@ -57,12 +58,18 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
         void CreateRoom()
         {
+            if (!ValidateUsername())
+                return;
+                
             RoomCode.Value = RandomString(4);
             PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions());
         }
 
         void JoinRoom()
         {
+            if (!ValidateUsername())
+                return;
+            
             if (string.IsNullOrEmpty(m_RoomCodeField.text))
             {
                 m_Error.text = "No room code has been entered!";
@@ -71,6 +78,18 @@ public class MainMenu : MonoBehaviourPunCallbacks
             
             RoomCode.Value = m_RoomCodeField.text.ToUpper();
             PhotonNetwork.JoinRoom(RoomCode.Value);
+        }
+
+        bool ValidateUsername()
+        {
+            if (string.IsNullOrEmpty(m_UsernameField.text))
+            {
+                m_Error.text = "No username has been entered!";
+                return false;
+            }
+
+            Username.Value = m_UsernameField.text;
+            return true;
         }
     }
     
