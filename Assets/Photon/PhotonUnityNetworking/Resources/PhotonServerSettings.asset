@@ -38,7 +38,8 @@ MonoBehaviour:
   - RespawnSpaceship
   - SetUsername
   - SetHostText
-  - StartGame
+  - PossessObjectRPC
+  - StopPossessObjectRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

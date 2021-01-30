@@ -1,59 +1,60 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace
+public class Player : MonoBehaviour
 {
-    public class Player : MonoBehaviour
+    public PlayerType CurrentType { get; set; }
+        
+    private GhostController m_GhostController;
+
+    private GhostController GhostController
     {
-        public PlayerType CurrentType { get; set; }
+        get
+        {
+            if (m_GhostController == null)
+                m_GhostController = GetComponent<GhostController>();
+
+            return m_GhostController;
+        }
+    }
         
-        private GhostController m_GhostController;
+    private HumanController m_HumanController;
 
-        private GhostController GhostController
+    private HumanController HumanController
+    {
+        get
         {
-            get
-            {
-                if (m_GhostController == null)
-                    m_GhostController = GetComponent<GhostController>();
+            if (m_HumanController == null)
+                m_HumanController = GetComponent<HumanController>();
 
-                return m_GhostController;
-            }
+            return m_HumanController;
         }
-        
-        private HumanController m_HumanController;
+    }
 
-        private HumanController HumanController
-        {
-            get
-            {
-                if (m_HumanController == null)
-                    m_HumanController = GetComponent<HumanController>();
 
-                return m_HumanController;
-            }
-        }
-        
-        public void MakeIntoGhost()
-        {
-            CurrentType = PlayerType.Ghost;
+    public bool IsGhost { get { return GhostController.enabled; } }
+    public bool IsHuman { get { return HumanController.enabled; } }
+
+
+    public void MakeIntoGhost()
+    {
+        CurrentType = PlayerType.Ghost;
             
-            GhostController.SetEnabled(true);
-            HumanController.SetEnabled(false);
+        GhostController.SetEnabled(true);
+        HumanController.SetEnabled(false);
             
-            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
-        }
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
+    }
 
-        public void MakeIntoHuman()
-        {
-            CurrentType = PlayerType.Human;
-            
-            GetComponent<GhostController>().SetEnabled(false);
-            GetComponent<HumanController>().SetEnabled(true);
+    public void MakeIntoHuman()
+    {
+        CurrentType = PlayerType.Human;
 
-            SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
-        }
+        GhostController.SetEnabled(false);
+        HumanController.SetEnabled(true);
 
+        SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
     }
 
     public enum PlayerType

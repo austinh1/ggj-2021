@@ -21,7 +21,7 @@ public class Game : MonoBehaviour
     {
         CurrentState = GameState.Setup;
         
-        NetworkPlayer = PhotonNetwork.Instantiate("PlayerPrefab Austin", Vector2.zero, Quaternion.identity).GetComponent<NetworkPlayer>();
+        NetworkPlayer = PhotonNetwork.Instantiate("PlayerPrefab Brendan", Vector2.zero, Quaternion.identity).GetComponent<NetworkPlayer>();
             
         m_CinemachineVirtualCamera.Follow = NetworkPlayer.transform;
         m_Camera.transform.position = Vector3.zero;

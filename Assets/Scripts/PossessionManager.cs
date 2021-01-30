@@ -9,6 +9,6 @@ public class PossessionManager : MonoBehaviourSingleton<PossessionManager>
 
     public void Start()
     {
-        PossessionObjects = PossessionObjectParent.GetComponentsInChildren<PossessionObject>().ToList();
+        //PossessionObjects = PossessionObjectParent.GetComponentsInChildren<PossessionObject>().ToList();
     }
 }
