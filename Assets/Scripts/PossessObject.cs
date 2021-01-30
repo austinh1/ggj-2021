@@ -60,15 +60,18 @@ public class PossessObject : MonoBehaviour
 
         foreach (var possessionObject in PossessionManager.instance._possessionObjects)
         {
-            if(possessionObject != NearestPossessionObject)
+            if (possessionObject != NearestPossessionObject)
                 possessionObject.SpriteRenderer.color = Color.white;
-            else
-                NearestPossessionObject.SpriteRenderer.color = Color.cyan;
+
+            if(NearestPossessionObject != null)
+                NearestPossessionObject.SpriteRenderer.color = Color.red;
         }
     }
 
     public void Update()
     {
+        if (!IsLocal) return;
+        
         if(!IsPossessing) CheckForPossessionObjects();
 
         if (!Input.GetKeyDown(KeyCode.LeftShift)) return;
@@ -101,9 +104,9 @@ public class PossessObject : MonoBehaviour
 
     private void PossessNearestObject()
     {
-        PossessedObjectIndex = PossessionManager.instance._possessionObjects.IndexOf(CurrentPossessionObject);
         CurrentPossessionObject = NearestPossessionObject;
-        NearestPossessionObject.SpriteRenderer.enabled = false;
+        PossessedObjectIndex = PossessionManager.instance._possessionObjects.IndexOf(CurrentPossessionObject);
+        CurrentPossessionObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = CurrentPossessionObject.SpriteRenderer.sprite;
         IsPossessing = true;
         
@@ -111,30 +114,40 @@ public class PossessObject : MonoBehaviour
             PhotonView.RPC(nameof(PossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
     }
     
+    [PunRPC]
+    [UsedImplicitly]
+    public void HighlightObjRPC(Player player)
+    {
+        if (!PhotonView.Owner.Equals(player)) return;
+
+        foreach (var possessionObject in PossessionManager.instance._possessionObjects)
+        {
+            possessionObject.SpriteRenderer.color = possessionObject == NearestPossessionObject ? Color.red : Color.white;
+        }
+    }
+    
     
     [PunRPC]
     [UsedImplicitly]
     public void PossessObjectRPC(Player player, int possessedObjectIndex)
     {
-        if (PhotonView.Owner.Equals(player))
-        {
-            PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
-            pObject.SpriteRenderer.enabled = false;
-            PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
-        }
+        if (!PhotonView.Owner.Equals(player)) return;
+
+        PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
+        pObject.SpriteRenderer.enabled = false;
+        PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
     }
     
     [PunRPC]
     [UsedImplicitly]
     public void StopPossessObjectRPC(Player player, int possessedObjectIndex)
     {
-        if (PhotonView.Owner.Equals(player))
-        {
-            PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
-            pObject.transform.position = transform.position;
-            pObject.SpriteRenderer.enabled = true;
-            PlayerSprite.sprite = GetComponent<PlayerController>().PlayerSprite;
-        }
+        if (!PhotonView.Owner.Equals(player)) return;
+
+        PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
+        pObject.transform.position = transform.position;
+        pObject.SpriteRenderer.enabled = true;
+        PlayerSprite.sprite = GetComponent<PlayerController>().PlayerSprite;
     }
     
     
