@@ -52,10 +52,25 @@ public class Game : MonoBehaviour
         SetGameStateToInProgress();
 
         var photonViews = PhotonNetwork.PhotonViews;
-        var humanPhotonView = photonViews.First(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().CurrentType == PlayerController.PlayerType.Human);
+        var humanPhotonView = photonViews.First(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsHuman);
         humanPhotonView.transform.position = m_HumanSpawnPoint.position;
-        
-        
+
+        var ghostPhotonViews = photonViews.Where(pv =>
+            pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsGhost).ToList();
+
+        if (!ghostPhotonViews.Any())
+            return;
+
+        for (var i = 0; i < m_GhostSpawnPoints.Count; i++)
+        {
+            if (i >= ghostPhotonViews.Count)
+                break;
+            
+            var spawnPoint = m_GhostSpawnPoints[i];
+            
+            var ghostPhotonView = ghostPhotonViews[i];
+            ghostPhotonView.transform.position = spawnPoint.position;
+        }
     }
 
     public void SetGameStateToInProgress()

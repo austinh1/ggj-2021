@@ -2,8 +2,6 @@
 
 public class PlayerController : MonoBehaviour
 {
-    public PlayerType CurrentType { get; set; }
-        
     private GhostController m_GhostController;
 
     private GhostController GhostController
@@ -31,14 +29,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public bool IsGhost { get { return GhostController.enabled; } }
-    public bool IsHuman { get { return HumanController.enabled; } }
+    public bool IsGhost => GhostController.enabled;
+    public bool IsHuman => HumanController.enabled;
 
 
     public void MakeIntoGhost()
     {
-        CurrentType = PlayerType.Ghost;
-            
         GhostController.SetEnabled(true);
         HumanController.SetEnabled(false);
             
@@ -48,18 +44,10 @@ public class PlayerController : MonoBehaviour
 
     public void MakeIntoHuman()
     {
-        CurrentType = PlayerType.Human;
-
         GhostController.SetEnabled(false);
         HumanController.SetEnabled(true);
 
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
-    }
-
-    public enum PlayerType
-    {
-        Ghost,
-        Human
     }
 }
