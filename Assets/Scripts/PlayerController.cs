@@ -40,7 +40,10 @@ public class PlayerController : MonoBehaviour
         HumanController.SetEnabled(false);
             
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
+        Sprite randomSprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
+        
+        spriteRenderer.sprite = randomSprite;
+        PlayerSprite = randomSprite;
     }
 
     public void MakeIntoHuman()
@@ -49,8 +52,6 @@ public class PlayerController : MonoBehaviour
         HumanController.SetEnabled(true);
 
         SpriteRenderer spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        Sprite randomSprite = GhostController.sprites[Random.Range(0, GhostController.sprites.Length)];
-        spriteRenderer.sprite = randomSprite;
-        PlayerSprite = randomSprite;
+        spriteRenderer.sprite = HumanController.sprites[Random.Range(0, HumanController.sprites.Length)];
     }
 }
