@@ -13,10 +13,12 @@ public class Interactable : MonoBehaviour
     private float bouncePos = 0f;
     private float prevBouncePos = 0f;
     private float startY;
+    private Transform spriteTransform;
 
     void Start()
     {
         startY = transform.position.y;
+        spriteTransform = transform.Find("Sprite");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -49,7 +51,7 @@ public class Interactable : MonoBehaviour
                 bouncePos = 0;
             }
 
-            transform.position = new Vector3(transform.position.x, startY + bounceCurve.Evaluate(bouncePos) * bounceDistance, transform.position.z);
+            spriteTransform.position = new Vector3(spriteTransform.position.x, startY + bounceCurve.Evaluate(bouncePos) * bounceDistance, spriteTransform.position.z);
 
             prevBouncePos = bouncePos;
         }
