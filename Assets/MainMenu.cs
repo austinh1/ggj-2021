@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_CreateButton;
     [SerializeField] private Button m_JoinButton;
     [SerializeField] private TMP_Text m_RoomCode;
+    [SerializeField] private TMP_Text m_Error;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
 
     private string Username { get; set; }
@@ -42,41 +43,40 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             RoomCode.Value = RandomString(4);
             PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions());
-            EnterRoom();
         }
 
         void JoinRoom()
         {
-            RoomCode.Value = m_RoomCodeField.text;
-            PhotonNetwork.JoinRoom(RoomCode.Value);
-            EnterRoom();
-        }
-
-        void EnterRoom()
-        {
-            m_JoinOrCreateRoom.gameObject.SetActive(false);
+            if (string.IsNullOrEmpty(m_RoomCodeField.text))
+            {
+                m_Error.text = "No room code has been entered!";
+                return;
+            }
+                
+            PhotonNetwork.JoinRoom(m_RoomCodeField.text);
         }
     }
     
     public override void OnConnectedToMaster()
     {
+        Debug.Log("CONNECTED");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.LogWarningFormat("PUN Basics Tutorial/Launcher: OnDisconnected() was called by PUN with reason {0}", cause);
+        Debug.Log("DISCONNECTED");
     }
     
-    public override void OnJoinRandomFailed(short returnCode, string message)
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        Debug.Log("PUN Basics Tutorial/Launcher:OnJoinRandomFailed() was called by PUN. No random room available, so we create one.\nCalling: PhotonNetwork.CreateRoom");
-
-        // #Critical: we failed to join a random room, maybe none exists or they are all full. No worries, we create a new room.
+        Debug.Log($"Error joining room: {returnCode}, {message}");
+        m_Error.text = $"Failed to join room {m_RoomCodeField.text}!";
     }
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+        RoomCode.Value = m_RoomCodeField.text;
+        m_JoinOrCreateRoom.gameObject.SetActive(false);
     }
     
     private static string RandomString(int length)
