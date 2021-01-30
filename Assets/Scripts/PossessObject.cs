@@ -1,3 +1,6 @@
+using DefaultNamespace;
+using JetBrains.Annotations;
+using Photon.Pun;
 using UnityEngine;
 
 public class PossessObject : MonoBehaviour
@@ -7,6 +10,7 @@ public class PossessObject : MonoBehaviour
     private Sprite OriginalSprite { get; set; }
     private bool IsPossessing { get; set; }
     private float MinPossessionDistance { get; } = 1f;
+    private int PossessedObjectIndex { get; set; } = -1;
 
     private SpriteRenderer _playerSprite;
 
@@ -19,6 +23,21 @@ public class PossessObject : MonoBehaviour
             return _playerSprite;
         }
     }
+    
+    private PhotonView m_PhotonView;
+
+    private PhotonView PhotonView
+    {
+        get
+        {
+            if (m_PhotonView == null)
+                m_PhotonView = GetComponent<PhotonView>();
+
+            return m_PhotonView;
+        }
+    }
+    
+    private bool IsLocal => PhotonView.IsMine;
 
     private void Start()
     {
@@ -73,13 +92,50 @@ public class PossessObject : MonoBehaviour
         CurrentPossessionObject.SpriteRenderer.enabled = true;
         PlayerSprite.sprite = OriginalSprite;
         IsPossessing = false;
+        
+        if (IsLocal)
+            PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex, OriginalSprite);
+
+        PossessedObjectIndex = -1;
     }
 
     private void PossessNearestObject()
     {
+        PossessedObjectIndex = PossessionManager.instance.PossessionObjects.IndexOf(CurrentPossessionObject);
         CurrentPossessionObject = NearestPossessionObject;
         NearestPossessionObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = CurrentPossessionObject.SpriteRenderer.sprite;
         IsPossessing = true;
+        
+        if (IsLocal)
+            PhotonView.RPC(nameof(PossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
     }
+    
+    
+    [PunRPC]
+    [UsedImplicitly]
+    public void PossessObjectRPC(Player player, int possessedObjectIndex)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            PossessionObject pObject = PossessionManager.instance.PossessionObjects[possessedObjectIndex];
+            pObject.SpriteRenderer.enabled = false;
+            PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
+        }
+    }
+    
+    [PunRPC]
+    [UsedImplicitly]
+    public void StopPossessObjectRPC(Player player, int possessedObjectIndex, Sprite originalSprite)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            PossessionObject pObject = PossessionManager.instance.PossessionObjects[possessedObjectIndex];
+            pObject.transform.position = player.transform.position;
+            pObject.SpriteRenderer.enabled = true;
+            PlayerSprite.sprite = originalSprite;
+        }
+    }
+    
+    
 }
