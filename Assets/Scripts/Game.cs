@@ -51,14 +51,7 @@ public class Game : MonoBehaviour
 
     private void Start()
     {
-        KeysLeft = m_Keys.Count;
-
-        foreach (var key in m_Keys)
-        {
-            key.gameObject.SetActive(false);
-        }
-        
-        m_Sandwich.SetActive(false);
+        ResetDoorKeyAndSandwich();
     }
 
     public void JoinRoom()
@@ -167,7 +160,12 @@ public class Game : MonoBehaviour
         CurrentState = GameState.InProgress;
         StartTime = Time.time;
 
-        ResetDoorKeyAndSandwich();
+        foreach (var key in m_Keys)
+        {
+            key.SetActive(true);
+        }
+        
+        m_Sandwich.SetActive(true);
     }
 
     public void GotKey(int keyIndex)
