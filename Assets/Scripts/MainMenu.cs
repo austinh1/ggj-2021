@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_StartButton;
     [SerializeField] private Button m_Rematch;
     [SerializeField] private Button m_ShuffleHuman;
+    [SerializeField] private Button m_MuteButton;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
@@ -92,8 +94,16 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             PlayAgain();
 
-            StartCoroutine(Blah());
+            StartCoroutine(Shuffle());
+        });
 
+        m_MuteButton.onClick.AddListener(delegate
+        {
+            var audioSources = m_MuteButton.GetComponentsInChildren<AudioSource>();
+            foreach(AudioSource source in audioSources)
+            {
+                source.enabled = !source.enabled;
+            }
         });
 
         void PlayAgain()
@@ -154,7 +164,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         }
     }
 
-    private IEnumerator Blah()
+    private IEnumerator Shuffle()
     {
         var networkPlayers = m_Game.GetNetworkPlayers();
         var previousHumanPlayers = networkPlayers.Where(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
@@ -168,18 +178,20 @@ public class MainMenu : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(.1f);
         
         var ghostsWithoutPreviousHumans = networkPlayers.Where(np => !previousHumanPlayers.Contains(np)).ToList();
+        var shuffledGhosts = ghostsWithoutPreviousHumans.OrderBy(a => Guid.NewGuid()).ToList();
 
         m_Game.TotalPlayerToStartingHumansMap.TryGetValue(networkPlayers.Count, out var humanCount);
         for (var i = 0; i < humanCount; i++)
         {
-            ghostsWithoutPreviousHumans[i].SendMakeIntoHumanMessage();
+            shuffledGhosts[i].SendMakeIntoHumanMessage();
+            shuffledGhosts[i].SendSetOriginallyGhostMessage(false);                
         }
         
         yield return new WaitForSeconds(.1f);
         
         m_Game.PositionHumanAndGhosts();
     }
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
