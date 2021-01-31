@@ -39,6 +39,18 @@ public class PossessObject : MonoBehaviour
     
     private bool IsLocal => PhotonView.IsMine;
 
+    private PlayerController _playerController;
+
+    private PlayerController PlayerController
+    {
+        get
+        {
+            if (_playerController == null) _playerController = GetComponent<PlayerController>();
+
+            return _playerController;
+        }
+    }
+
     private void Start()
     {
         OriginalSprite = PlayerSprite.sprite;
@@ -91,6 +103,7 @@ public class PossessObject : MonoBehaviour
 
     private void StopPossessing()
     {
+        PlayerController.PlayerAnimator.enabled = true;
         CurrentPossessionObject.transform.position = transform.position;
         CurrentPossessionObject.SpriteRenderer.enabled = true;
         PlayerSprite.sprite = OriginalSprite;
@@ -104,6 +117,7 @@ public class PossessObject : MonoBehaviour
 
     private void PossessNearestObject()
     {
+        PlayerController.PlayerAnimator.enabled = false;
         CurrentPossessionObject = NearestPossessionObject;
         PossessedObjectIndex = PossessionManager.instance._possessionObjects.IndexOf(CurrentPossessionObject);
         CurrentPossessionObject.SpriteRenderer.enabled = false;
@@ -134,7 +148,7 @@ public class PossessObject : MonoBehaviour
         PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
         pObject.transform.position = transform.position;
         pObject.SpriteRenderer.enabled = true;
-        PlayerSprite.sprite = GetComponent<PlayerController>().PlayerSprite;
+        PlayerSprite.sprite = PlayerController.PlayerSprite;
     }
     
     
