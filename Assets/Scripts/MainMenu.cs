@@ -93,7 +93,6 @@ public class MainMenu : MonoBehaviourPunCallbacks
             PlayAgain();
 
             StartCoroutine(Blah());
-
         });
 
         void PlayAgain()
@@ -173,6 +172,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         for (var i = 0; i < humanCount; i++)
         {
             ghostsWithoutPreviousHumans[i].SendMakeIntoHumanMessage();
+            ghostsWithoutPreviousHumans[i].SendSetOriginallyGhostMessage(false);                
         }
         
         yield return new WaitForSeconds(.1f);
