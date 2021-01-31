@@ -63,11 +63,12 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         
         var boost = new Vector2(dashBoost, dashBoost) * dashDir;
         var move = new Vector2(inputX, inputY).normalized * speed;
-        var desiredVelocity = move + boost;
+        var multiplier = (PossessObject.IsPossessing ? 0.5f : 1f);
+        var desiredVelocity = (move + boost) * new Vector2(multiplier, multiplier);
         rigidbody2D.velocity = Vector3.Lerp(rigidbody2D.velocity, desiredVelocity, accelSpeed * Time.deltaTime);
 
-        // Only allow dashing while moving and it's not on cooldown
-        if (Input.GetKeyDown(KeyCode.Space) && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
+        // Only allow dashing while moving, it's not on cooldown, and not possessing something
+        if (Input.GetKeyDown(KeyCode.Space) && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0) && !PossessObject.IsPossessing)
         {
             dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY)).normalized;
             dashBoost = dashSpeed;
