@@ -52,6 +52,7 @@ MonoBehaviour:
   - FaceDirectionRPC
   - AllHumansRPC
   - MakeIntoHumanAndPositionEveryoneRPC
+  - GetSlappedRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
