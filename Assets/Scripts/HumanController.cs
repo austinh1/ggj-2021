@@ -161,6 +161,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     
     void SetSlapAnimation(bool oldVal, bool newVal)
     {
+        if (PlayerController.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Slapping"))
+            return;
+
         PlayerController.PlayerAnimator.SetTrigger("Slapping");
         if (IsLocal)
             PhotonView.RPC(nameof(PlayerController.SlapAnimationRPC), RpcTarget.Others, PhotonView.Owner);
