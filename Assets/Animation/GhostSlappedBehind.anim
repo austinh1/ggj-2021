@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GhostSlapped
+  m_Name: GhostSlappedBehind
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,11 +20,11 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: f775433632ccf5a4b9aa211f333c8690, type: 3}
+      value: {fileID: 21300000, guid: 8239afa3bceb3494ab624bf680c33122, type: 3}
     - time: 0.016666668
-      value: {fileID: 21300000, guid: 96bcdcc35d78aab4190efa898eddcf03, type: 3}
+      value: {fileID: 21300000, guid: ccf2163d7667850458ecc1a6c5b096fb, type: 3}
     - time: 0.033333335
-      value: {fileID: 21300000, guid: 7d3c1e74c3775d247969667bae8e0235, type: 3}
+      value: {fileID: 21300000, guid: df76d49520839ac448bc67486696b031, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -44,9 +44,9 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: f775433632ccf5a4b9aa211f333c8690, type: 3}
-    - {fileID: 21300000, guid: 96bcdcc35d78aab4190efa898eddcf03, type: 3}
-    - {fileID: 21300000, guid: 7d3c1e74c3775d247969667bae8e0235, type: 3}
+    - {fileID: 21300000, guid: 8239afa3bceb3494ab624bf680c33122, type: 3}
+    - {fileID: 21300000, guid: ccf2163d7667850458ecc1a6c5b096fb, type: 3}
+    - {fileID: 21300000, guid: df76d49520839ac448bc67486696b031, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

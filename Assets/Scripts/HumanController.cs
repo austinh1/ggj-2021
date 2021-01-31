@@ -12,6 +12,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     [Range(0.0f, 10.0f)]
     public float slapRange = 2f;
 
+    public AudioClip slapSound;
+    public GameObject slapEffectPrefab;
+
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -69,7 +72,20 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         {
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
+
+            var slappedRigidBody = nearestPlayer.GetComponent<Rigidbody2D>();
+            // Determine whether the player was behind the ghost or not and adjust sprite accordingly
+            // This actually gets the direction they are moving rather than "facing". We don't have a facing direction right now.
+            var slappedFacingDir = slappedRigidBody.velocity.x != 0 ? Math.Sign(slappedRigidBody.velocity.x) : Math.Sign(slappedRigidBody.transform.localScale.x);
+            var dirToSlapped = Math.Sign(nearestPlayer.transform.position.x - transform.position.x);
+            bool fromBehind = slappedFacingDir == dirToSlapped;
+            nearestPlayer.PlayerAnimator.SetBool("FromBehind", fromBehind);
             nearestPlayer.PlayerAnimator.SetTrigger("Slapped");
+
+            // Play slap sound effect and create visual
+            var audioSource = GetComponent<AudioSource>();
+            audioSource.PlayOneShot(slapSound);
+            Instantiate(slapEffectPrefab, nearestPlayer.transform.position, Quaternion.identity);
         }
     }
 }
