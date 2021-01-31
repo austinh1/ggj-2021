@@ -1,12 +1,9 @@
 using System;
-using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
 public class HumanController : MonoBehaviour, IPlayerMovement
 {
-    private Rigidbody2D rigidbody2D;
-    private PlayerController playerController;
-
     [Range(0.0f, 10.0f)]
     public float speed = 7f;
 
@@ -16,50 +13,84 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     public AudioClip slapSound;
     public GameObject slapEffectPrefab;
     
-    private NetworkPlayer m_NetworkPlayer;
+    private Rigidbody2D _rigidbody2D;
+    private PlayerController _playerController;
+    private PhotonView _photonView;
+    private NetworkPlayer _networkPlayer;
+    
+    private Observable<bool> _isWalking = new Observable<bool>();
+    private Observable<bool> _isSlapPressed = new Observable<bool>();
+    private Observable<bool> _isFacingLeft = new Observable<bool>();
 
+    private PhotonView PhotonView
+    {
+        get
+        {
+            if (_photonView == null)
+                _photonView = GetComponent<PhotonView>();
+
+            return _photonView;
+        }
+    }
+    private PlayerController PlayerController
+    {
+        get
+        {
+            if (_playerController == null)
+                _playerController = GetComponent<PlayerController>();
+    
+            return _playerController;
+        }
+    }
+    private Rigidbody2D Rigidbody2D
+    {
+        get
+        {
+            if (_rigidbody2D == null)
+                _rigidbody2D = GetComponent<Rigidbody2D>();
+    
+            return _rigidbody2D;
+        }
+    }
     private NetworkPlayer NetworkPlayer
     {
         get
         {
-            if (m_NetworkPlayer == null)
-                m_NetworkPlayer = GetComponent<NetworkPlayer>();
+            if (_networkPlayer == null)
+                _networkPlayer = GetComponent<NetworkPlayer>();
 
-            return m_NetworkPlayer;
+            return _networkPlayer;
         }
     }
+    
+    private bool IsLocal => PhotonView.IsMine;
 
     private void Start()
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        playerController = GetComponent<PlayerController>();
+        _isWalking.OnChange.AddListener(SetWalkAnimation);
+        _isSlapPressed.OnChange.AddListener(SetSlapAnimation);
+        _isFacingLeft.OnChange.AddListener(SetFacingDirection);
     }
 
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal Human");
-        float inputY = Input.GetAxis("Vertical Human");
+        var inputX = Input.GetAxis("Horizontal Human");
+        var inputY = Input.GetAxis("Vertical Human");
 
-        playerController.PlayerAnimator.SetBool("Walking", inputX != 0 || inputY != 0);
+        _isWalking.Value = inputX != 0 || inputY != 0;
 
         var direction = new Vector3(inputX, inputY);
 
-        rigidbody2D.velocity = direction.normalized * speed;
-
-        bool isSlapping = playerController.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Slapping");
-        if (isSlapping)
-        {
+        Rigidbody2D.velocity = direction.normalized * speed;
+        
+        _isSlapPressed.Value = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.F);
+        var isSlapAnimating = PlayerController.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Slapping");
+        if (isSlapAnimating)
             CheckSlap();
-        }
-        else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.F))
-        {
-            playerController.PlayerAnimator.SetTrigger("Slapping");
-        }
 
-        if (rigidbody2D.velocity.x != 0)
-        {
-           playerController.SetFlipX(rigidbody2D.velocity.x < 0);
-        }
+        if (Rigidbody2D.velocity.x != 0)
+            _isFacingLeft.Value = Rigidbody2D.velocity.x < 0;
+
     }
 
     public void SetEnabled(bool value)
@@ -111,4 +142,29 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             Instantiate(slapEffectPrefab, nearestPlayer.transform.position + new Vector3(0.6f, 0.6f, 0), Quaternion.identity);
         }
     }
+    
+    void SetFacingDirection(bool oldVal, bool newVal)
+    {
+        PlayerController.SetFlipX(newVal);
+
+        if (IsLocal)
+            PhotonView.RPC(nameof(PlayerController.FaceDirectionRPC), RpcTarget.Others, PhotonView.Owner, newVal);
+    }
+
+    void SetWalkAnimation(bool oldVal, bool newVal)
+    {
+        PlayerController.PlayerAnimator.SetBool("Walking", newVal);
+        
+        if (IsLocal)
+            PhotonView.RPC(nameof(PlayerController.WalkAnimationRPC), RpcTarget.Others, PhotonView.Owner, newVal);
+    }
+    
+    void SetSlapAnimation(bool oldVal, bool newVal)
+    {
+        PlayerController.PlayerAnimator.SetTrigger("Slapping");
+        if (IsLocal)
+            PhotonView.RPC(nameof(PlayerController.SlapAnimationRPC), RpcTarget.Others, PhotonView.Owner);
+    }
+
+    
 }

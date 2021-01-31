@@ -1,16 +1,10 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour, IPlayerMovement
 {
-    private Rigidbody2D rigidbody2D;
-    private PlayerController playerController;
-    private TimeSpan dashCooldown = new TimeSpan(0);
-    private Vector2 dashDir;
-    private float dashBoost = 0f;
-
-    public bool IsConverting { get; private set; }
-
+    
     [Range(0.0f, 10.0f)]
     public float speed = 5f;
 
@@ -22,77 +16,117 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     
     [Range(0, 10)]
     public float accelSpeed = 5f;
-    
-    private NetworkPlayer m_NetworkPlayer;
 
+    private Rigidbody2D _rigidbody2D;
+    private PlayerController _playerController;
+    private PhotonView _photonView;
+    private NetworkPlayer _networkPlayer;
+    private PossessObject _possessObject;
+    private TimeSpan _dashCooldown = new TimeSpan(0);
+    private Vector2 _dashDir;
+    private float _dashBoost = 0f;
+    
+    private Observable<bool> _isFacingLeft = new Observable<bool>();
+    
+    public bool IsConverting { get; private set; }
+    
+    private PhotonView PhotonView
+    {
+        get
+        {
+            if (_photonView == null)
+                _photonView = GetComponent<PhotonView>();
+
+            return _photonView;
+        }
+    }
+    private PlayerController PlayerController
+    {
+        get
+        {
+            if (_playerController == null)
+                _playerController = GetComponent<PlayerController>();
+    
+            return _playerController;
+        }
+    }
+    private Rigidbody2D Rigidbody2D
+    {
+        get
+        {
+            if (_rigidbody2D == null)
+                _rigidbody2D = GetComponent<Rigidbody2D>();
+    
+            return _rigidbody2D;
+        }
+    }
     private NetworkPlayer NetworkPlayer
     {
         get
         {
-            if (m_NetworkPlayer == null)
-                m_NetworkPlayer = GetComponent<NetworkPlayer>();
+            if (_networkPlayer == null)
+                _networkPlayer = GetComponent<NetworkPlayer>();
 
-            return m_NetworkPlayer;
+            return _networkPlayer;
         }
     }
-    
-    private PossessObject m_PossessObject;
-
     private PossessObject PossessObject
     {
         get
         {
-            if (m_PossessObject == null)
-                m_PossessObject = GetComponent<PossessObject>();
+            if (_possessObject == null)
+                _possessObject = GetComponent<PossessObject>();
 
-            return m_PossessObject;
+            return _possessObject;
         }
     }
     
+    private bool IsLocal => PhotonView.IsMine;
     private void Start()
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        playerController = GetComponent<PlayerController>();
         IsConverting = false;
+        _isFacingLeft.OnChange.AddListener(SetFacingDirection);
     }
     
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal Ghost");
-        float inputY = Input.GetAxis("Vertical Ghost");
+        var inputX = Input.GetAxis("Horizontal Ghost");
+        var inputY = Input.GetAxis("Vertical Ghost");
         
-        var boost = new Vector2(dashBoost, dashBoost) * dashDir;
+        var boost = new Vector2(_dashBoost, _dashBoost) * _dashDir;
         var move = new Vector2(inputX, inputY).normalized * speed;
         var desiredVelocity = move + boost;
-        rigidbody2D.velocity = Vector3.Lerp(rigidbody2D.velocity, desiredVelocity, accelSpeed * Time.deltaTime);
+        Rigidbody2D.velocity = Vector3.Lerp(Rigidbody2D.velocity, desiredVelocity, accelSpeed * Time.deltaTime);
 
         // Only allow dashing while moving and it's not on cooldown
-        if (Input.GetKeyDown(KeyCode.Space) && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
+        if (Input.GetKeyDown(KeyCode.Space) && _dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
         {
-            dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY)).normalized;
-            dashBoost = dashSpeed;
-            dashCooldown = new TimeSpan(0, 0, dashCooldownSeconds);
+            _dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY)).normalized;
+            _dashBoost = dashSpeed;
+            _dashCooldown = new TimeSpan(0, 0, dashCooldownSeconds);
         }
         
         // Decelerate dash
-        if (dashBoost > 0)
-        {
-            dashBoost -= dashSpeed * Time.deltaTime;
-        }
+        if (_dashBoost > 0)
+            _dashBoost -= dashSpeed * Time.deltaTime;
         else
-        {
-            dashBoost = 0f;
-        }
+            _dashBoost = 0f;
         
-        if (dashCooldown > TimeSpan.Zero)
-        {
-            dashCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
-        }
+        if (_dashCooldown > TimeSpan.Zero)
+            _dashCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
+        
 
-        if (rigidbody2D.velocity.x != 0)
-        {
-            playerController.SetFlipX(rigidbody2D.velocity.x < 0);
-        }
+        if (Rigidbody2D.velocity.x != 0)
+            _isFacingLeft.Value = Rigidbody2D.velocity.x < 0;
+        
+    }
+    
+    void SetFacingDirection(bool oldVal, bool newVal)
+    {
+        PlayerController.SetFlipX(newVal);
+
+        if (IsLocal)
+            PhotonView.RPC(nameof(PlayerController.FaceDirectionRPC), RpcTarget.Others, PhotonView.Owner, newVal);
     }
 
     public void SetEnabled(bool value)
@@ -102,8 +136,8 @@ public class GhostController : MonoBehaviour, IPlayerMovement
 
     public void GetSlapped(bool fromBehind)
     {
-        playerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
-        playerController.PlayerAnimator.SetTrigger("Slapped");
+        PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
+        PlayerController.PlayerAnimator.SetTrigger("Slapped");
         IsConverting = true;
     }
 
@@ -113,12 +147,8 @@ public class GhostController : MonoBehaviour, IPlayerMovement
             return;
         
         if (other.CompareTag("Key"))
-        {
             NetworkPlayer.SendGotKeyMessage(other.gameObject);
-        }
         else if (other.CompareTag("Sandwich"))
-        {
             NetworkPlayer.SendGotSandwichMessage();
-        }
     }
 }

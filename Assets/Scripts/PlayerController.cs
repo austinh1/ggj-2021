@@ -1,5 +1,7 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -131,4 +133,29 @@ public class PlayerController : MonoBehaviour
 
         PlayerSpriteRenderer.flipX = flipX;
     }
+    
+    #region PunRPCs
+    [PunRPC]
+    [UsedImplicitly]
+    public void WalkAnimationRPC(Player player, bool walking)
+    {
+        if (!PhotonView.Owner.Equals(player)) return;
+        PlayerAnimator.SetBool("Walking", walking);
+    }
+    
+    [PunRPC]
+    [UsedImplicitly]
+    public void SlapAnimationRPC(Player player)
+    {
+        if (!PhotonView.Owner.Equals(player)) return;
+        PlayerAnimator.SetTrigger("Slapping");
+    }
+    
+    [PunRPC]
+    [UsedImplicitly]
+    public void FaceDirectionRPC(Player player, bool facingLeft)
+    {
+        SetFlipX(facingLeft);
+    }
+    #endregion
 }
