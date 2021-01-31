@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_LeaveButton;
     [SerializeField] private Button m_StartButton;
     [SerializeField] private Button m_Rematch;
+    [SerializeField] private Button m_ShuffleHuman;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
@@ -69,8 +70,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         
         m_Rematch.onClick.AddListener(delegate
         {
-            RestartGame();
-            NetworkPlayer.SendRestartGameMessage();
+            PlayAgain();
             
             var networkPlayers = m_Game.GetNetworkPlayers();
             
@@ -78,9 +78,30 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
             foreach (var networkPlayer in originallyGhostNetworkPlayers)
                 networkPlayer.SendMakeIntoGhostMessage();
-            
+
             m_Game.PositionHumanAndGhosts();
         });
+        
+        m_ShuffleHuman.onClick.AddListener(delegate
+        {
+            PlayAgain();
+            
+            var networkPlayers = m_Game.GetNetworkPlayers();
+            
+            foreach (var networkPlayer in networkPlayers)
+                networkPlayer.SendMakeIntoGhostMessage();
+
+            var randomPlayerIndex = UnityEngine.Random.Range(0, networkPlayers.Count);
+            var randomPlayer = networkPlayers[randomPlayerIndex];
+            
+            randomPlayer.SendMakeIntoHumanAndPositionEveryoneMessage();
+        });
+
+        void PlayAgain()
+        {
+            RestartGame();
+            NetworkPlayer.SendRestartGameMessage();
+        }
         
         PhotonNetwork.ConnectUsingSettings();
 
@@ -212,6 +233,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_HumansWin.gameObject.SetActive(false);
         m_GhostsWin.gameObject.SetActive(false);
         m_Rematch.gameObject.SetActive(false);
+        m_ShuffleHuman.gameObject.SetActive(false);
         m_Error.text = string.Empty;
         
         m_Game.LeaveRoom();
@@ -241,7 +263,10 @@ public class MainMenu : MonoBehaviourPunCallbacks
     private void OpenRematch()
     {
         if (PhotonNetwork.IsMasterClient)
+        {
             m_Rematch.gameObject.SetActive(true);
+            m_ShuffleHuman.gameObject.SetActive(true);   
+        }
     }
 
     public void RestartGame()
@@ -254,5 +279,6 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_HumansWin.gameObject.SetActive(false);
         m_GhostsWin.gameObject.SetActive(false);
         m_Rematch.gameObject.SetActive(false);
+        m_ShuffleHuman.gameObject.SetActive(false);
     }
 }

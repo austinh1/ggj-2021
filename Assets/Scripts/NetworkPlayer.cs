@@ -115,6 +115,23 @@ public class NetworkPlayer : MonoBehaviour
         }
     }
     
+    public void SendMakeIntoHumanAndPositionEveryoneMessage()
+    {
+        PhotonView.RPC(nameof(MakeIntoHumanRPC), RpcTarget.AllBuffered, PhotonView.Owner);
+    }
+
+    [PunRPC]
+    public void MakeIntoHumanAndPositionEveryoneRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} was made into a human!");
+            Player.MakeIntoHuman();
+            
+            Game.PositionHumanAndGhosts();
+        }
+    }
+    
     public void SendMakeIntoGhostMessage()
     {
         PhotonView.RPC(nameof(MakeIntoGhostRPC), RpcTarget.AllBuffered, PhotonView.Owner);
