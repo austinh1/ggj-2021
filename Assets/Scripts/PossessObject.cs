@@ -8,7 +8,7 @@ public class PossessObject : MonoBehaviour
     private PossessionObject NearestPossessionObject { get; set; }
     private PossessionObject CurrentPossessionObject { get; set; }
     private Sprite OriginalSprite { get; set; }
-    private bool IsPossessing { get; set; }
+    public bool IsPossessing { get; set; }
     private float MinPossessionDistance { get; } = 1f;
     private int PossessedObjectIndex { get; set; } = -1;
 

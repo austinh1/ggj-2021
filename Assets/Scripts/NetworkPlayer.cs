@@ -42,6 +42,8 @@ public class NetworkPlayer : MonoBehaviour
     public Game Game { get; set; }
     
     private MainMenu MainMenu { get; set; }
+
+    public bool OriginallyGhost { get; set; }
     
     private void Awake()
     {

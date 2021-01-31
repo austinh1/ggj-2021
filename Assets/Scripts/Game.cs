@@ -54,6 +54,8 @@ public class Game : MonoBehaviour
             var index = PhotonNetwork.PlayerList.ToList().IndexOf(NetworkPlayer.PhotonView.Owner);
             var ghostSpawnPoint = m_GhostSpawnPoints[index - 1];
             NetworkPlayer.transform.position = ghostSpawnPoint.position;
+
+            NetworkPlayer.OriginallyGhost = true;
         }
 
         m_MainMenu.NetworkPlayer = NetworkPlayer;

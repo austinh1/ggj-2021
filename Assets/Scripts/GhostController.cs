@@ -31,6 +31,19 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         }
     }
     
+    private PossessObject m_PossessObject;
+
+    private PossessObject PossessObject
+    {
+        get
+        {
+            if (m_PossessObject == null)
+                m_PossessObject = GetComponent<PossessObject>();
+
+            return m_PossessObject;
+        }
+    }
+    
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -77,7 +90,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!enabled)
+        if (!enabled || PossessObject.IsPossessing || NetworkPlayer.Game.CurrentState != Game.GameState.InProgress)
             return;
         
         if (other.CompareTag("Key"))

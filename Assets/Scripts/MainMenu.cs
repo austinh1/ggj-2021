@@ -71,6 +71,12 @@ public class MainMenu : MonoBehaviourPunCallbacks
             RestartGame();
             NetworkPlayer.SendRestartGameMessage();
             
+            var humanPhotonViews = PhotonNetwork.PhotonViews.Where(pv =>
+                pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsHuman && pv.GetComponent<NetworkPlayer>().OriginallyGhost).ToList();
+
+            foreach (var humanPhotonView in humanPhotonViews.Select(pv => pv.GetComponent<NetworkPlayer>()))
+                humanPhotonView.MakeIntoGhost();
+            
             m_Game.PositionHumanAndGhosts();
         });
         
