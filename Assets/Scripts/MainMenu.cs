@@ -90,14 +90,21 @@ public class MainMenu : MonoBehaviourPunCallbacks
             PlayAgain();
             
             var networkPlayers = m_Game.GetNetworkPlayers();
-            
-            foreach (var networkPlayer in networkPlayers)
-                networkPlayer.SendMakeIntoGhostMessage();
+            var previousHumanPlayer = networkPlayers.First(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
 
-            var randomPlayerIndex = UnityEngine.Random.Range(0, networkPlayers.Count);
-            var randomPlayer = networkPlayers[randomPlayerIndex];
+            foreach (var networkPlayer in networkPlayers)
+            {
+                networkPlayer.SendMakeIntoGhostMessage();
+                networkPlayer.SendSetOriginallyGhostMessage(true);                
+            }
+
+            var ghostsWithoutPreviousHuman = networkPlayers.Where(np => !np.Equals(previousHumanPlayer)).ToList();
+            var randomPlayerIndex = UnityEngine.Random.Range(0, ghostsWithoutPreviousHuman.Count);
+            var randomPlayer = ghostsWithoutPreviousHuman[randomPlayerIndex];
             
             randomPlayer.SendMakeIntoHumanAndPositionEveryoneMessage();
+            randomPlayer.SendSetOriginallyGhostMessage(false);                
+
         });
 
         void PlayAgain()

@@ -90,6 +90,9 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     
     void Update()
     {
+        if (NetworkPlayer.Game.SettingUp)
+            return;
+        
         var inputX = Input.GetAxis("Horizontal Ghost");
         var inputY = Input.GetAxis("Vertical Ghost");
         
