@@ -152,6 +152,12 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(true);
     }
 
+    private void OnGUI()
+    {
+        if(PhotonNetwork.IsConnected)
+            GUILayout.Label($"{PhotonNetwork.CountOfRooms} rooms active. {PhotonNetwork.CountOfPlayers} players active. {PhotonNetwork.CountOfPlayersInRooms} players in rooms.");
+    }
+
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("DISCONNECTED");
