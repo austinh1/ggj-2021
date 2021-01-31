@@ -123,7 +123,7 @@ public class PossessObject : MonoBehaviour
         NetworkPlayer.ShowUsername();
 
         if (IsLocal)
-            PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
+            PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.Others, PhotonView.Owner, PossessedObjectIndex);
 
         PossessedObjectIndex = -1;
     }
@@ -140,7 +140,7 @@ public class PossessObject : MonoBehaviour
         NetworkPlayer.HideUsername();
 
         if (IsLocal)
-            PhotonView.RPC(nameof(PossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
+            PhotonView.RPC(nameof(PossessObjectRPC), RpcTarget.Others, PhotonView.Owner, PossessedObjectIndex);
     }
     
     [PunRPC]

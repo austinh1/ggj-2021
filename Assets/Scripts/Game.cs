@@ -45,17 +45,17 @@ public class Game : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            NetworkPlayer.MakeIntoHuman();
+            NetworkPlayer.SendMakeIntoHumanMessage();
             NetworkPlayer.transform.position = m_HumanSpawnPoint.position;
         }
         else
         {
-            NetworkPlayer.MakeIntoGhost();
+            NetworkPlayer.SendMakeIntoGhostMessage();
+            NetworkPlayer.SendSetOriginallyGhostMessage(true);
+            
             var index = PhotonNetwork.PlayerList.ToList().IndexOf(NetworkPlayer.PhotonView.Owner);
             var ghostSpawnPoint = m_GhostSpawnPoints[index - 1];
             NetworkPlayer.transform.position = ghostSpawnPoint.position;
-
-            NetworkPlayer.OriginallyGhost = true;
         }
 
         m_MainMenu.NetworkPlayer = NetworkPlayer;
