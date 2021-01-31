@@ -117,7 +117,7 @@ public class NetworkPlayer : MonoBehaviour
     
     public void SendMakeIntoHumanAndPositionEveryoneMessage()
     {
-        PhotonView.RPC(nameof(MakeIntoHumanRPC), RpcTarget.AllBuffered, PhotonView.Owner);
+        PhotonView.RPC(nameof(MakeIntoHumanAndPositionEveryoneRPC), RpcTarget.AllBuffered, PhotonView.Owner);
     }
 
     [PunRPC]
@@ -125,7 +125,7 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (PhotonView.Owner.Equals(player))
         {
-            Debug.Log($"Player {player.ActorNumber} was made into a human!");
+            Debug.Log($"Player {player.ActorNumber} was made into a human and everyone is positioned!");
             Player.MakeIntoHuman();
             
             Game.PositionHumanAndGhosts();

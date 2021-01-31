@@ -9,7 +9,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     private Vector2 dashDir;
     private float dashBoost = 0f;
 
-    public bool IsConverting { get; private set; }
+    public bool IsConverting { get; set; }
 
     [Range(0.0f, 10.0f)]
     public float speed = 5f;

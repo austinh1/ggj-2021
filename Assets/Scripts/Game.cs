@@ -86,8 +86,8 @@ public class Game : MonoBehaviour
     public void PositionHumanAndGhosts()
     {
         var networkPlayers = GetNetworkPlayers();
-        var humanPhotonView = networkPlayers.First(pv => pv.GetComponent<PlayerController>().IsHuman);
-        humanPhotonView.transform.position = m_HumanSpawnPoint.position;
+        var humanNetworkPlayer = networkPlayers.First(pv => pv.GetComponent<PlayerController>().IsHuman);
+        humanNetworkPlayer.SendSetPositionMessage(m_HumanSpawnPoint.position);
 
         var ghostNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsGhost).ToList();
 

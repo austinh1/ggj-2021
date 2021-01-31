@@ -96,6 +96,8 @@ public class PlayerController : MonoBehaviour
         PlayerSpriteRenderer = ghostSprite.GetComponent<SpriteRenderer>();
         PlayerSprite = PlayerSpriteRenderer.sprite;
         PlayerAnimator = ghostSprite.GetComponent<Animator>();
+
+        GhostController.IsConverting = false;
     }
 
     public void MakeIntoHuman()
