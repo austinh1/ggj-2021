@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 6716254284513575524}
   - component: {fileID: 4024435785469173661}
   m_Layer: 5
-  m_Name: Lose
+  m_Name: Ghosts Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You lose :(
+  m_text: Ghosts Win!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 9162333968972821168}
   - component: {fileID: 2898901066667122652}
   m_Layer: 5
-  m_Name: Win
+  m_Name: Humans Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: YOU WIN!
+  m_text: Humans Win!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2299,8 +2299,8 @@ MonoBehaviour:
   m_RoomCode: {fileID: 9066305737690474648}
   m_PlayerCount: {fileID: 9066305736825467299}
   m_Connecting: {fileID: 9066305737136412650}
-  m_Win: {fileID: 2898901066667122652}
-  m_Lose: {fileID: 4024435785469173661}
+  m_HumansWin: {fileID: 2898901066667122652}
+  m_GhostsWin: {fileID: 4024435785469173661}
   m_JoinOrCreateRoom: {fileID: 9066305737536263340}
   m_Game: {fileID: 0}
 --- !u!1 &9066305737225846834

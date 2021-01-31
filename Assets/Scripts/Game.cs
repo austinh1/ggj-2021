@@ -143,10 +143,16 @@ public class Game : MonoBehaviour
     {
         CurrentState = GameState.Complete;
 
-        if (NetworkPlayer.Player.IsGhost)
-            m_MainMenu.OpenWin();
-        else
-            m_MainMenu.OpenLose();
+        m_MainMenu.OpenGhostsWin();
+        
+        m_Sandwich.SetActive(false);
+    }
+    
+    public void AllHumans()
+    {
+        CurrentState = GameState.Complete;
+
+        m_MainMenu.OpenHumansWin();
         
         m_Sandwich.SetActive(false);
     }
