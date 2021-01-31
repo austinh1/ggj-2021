@@ -179,7 +179,7 @@ public class Game : MonoBehaviour
         if (KeysLeft <= 0)
         {
             foreach (var lockedDoor in m_LockedDoors)
-                lockedDoor.Close();
+                lockedDoor.Open();
         }
     }
 
