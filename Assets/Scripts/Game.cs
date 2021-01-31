@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
@@ -11,10 +12,23 @@ public class Game : MonoBehaviour
     [SerializeField] private Camera m_Camera;
     [SerializeField] private MainMenu m_MainMenu;
     [SerializeField] private List<Transform> m_GhostSpawnPoints;
-    [SerializeField] private Transform m_HumanSpawnPoint;
+    [SerializeField] private List<Transform> m_HumanSpawnPoints;
     [SerializeField] private List<LockedDoor> m_LockedDoors;
     [SerializeField] private List<GameObject> m_Keys;
     [SerializeField] private GameObject m_Sandwich;
+
+    public Dictionary<int, int> TotalPlayerToStartingHumansMap { get; } = new Dictionary<int, int>()
+    {
+        {2, 1},
+        {3, 1},
+        {4, 1},
+        {5, 2},
+        {6, 2},
+        {7, 2},
+        {8, 3},
+        {9, 3},
+        {10, 3},
+    };
 
     public GameState CurrentState { get; set; }
 
@@ -55,11 +69,11 @@ public class Game : MonoBehaviour
             
         m_CinemachineVirtualCamera.Follow = NetworkPlayer.transform;
         m_Camera.transform.position = Vector3.zero;
-
+        
         if (PhotonNetwork.IsMasterClient)
         {
             NetworkPlayer.SendMakeIntoHumanMessage();
-            NetworkPlayer.transform.position = m_HumanSpawnPoint.position;
+            NetworkPlayer.transform.position = m_HumanSpawnPoints[0].position;
         }
         else
         {
@@ -88,21 +102,46 @@ public class Game : MonoBehaviour
         Setup,
         InProgress,
         Complete
-    }
+    }  
 
     public void StartGameMaster()
     {
         NetworkPlayer.SendStartGameMessage();
         SetGameStateToInProgress();
 
+        StartCoroutine(AssignHumansAndPositionAsync());
+    }
+
+    private IEnumerator AssignHumansAndPositionAsync()
+    {
+        var networkPlayers = GetNetworkPlayers();
+        
+        TotalPlayerToStartingHumansMap.TryGetValue(networkPlayers.Count, out var humanCount);
+        var humanNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsHuman).ToList();
+        
+        if (humanNetworkPlayers.Count < humanCount)
+        {
+            var neededHumanCount = humanCount - humanNetworkPlayers.Count;
+            var ghostNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsGhost).ToList();
+            for (var i = 0; i < neededHumanCount; i++)
+            {
+                ghostNetworkPlayers[i].SendMakeIntoHumanMessage();
+            }
+        }
+
+        yield return new WaitForSeconds(.2f);
+        
         PositionHumanAndGhosts();
     }
 
     public void PositionHumanAndGhosts()
     {
         var networkPlayers = GetNetworkPlayers();
-        var humanNetworkPlayer = networkPlayers.First(pv => pv.GetComponent<PlayerController>().IsHuman);
-        humanNetworkPlayer.SendSetPositionMessage(m_HumanSpawnPoint.position);
+        var humanNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsHuman).ToList();
+        for (var i = 0; i < humanNetworkPlayers.Count; i++)
+        {
+            humanNetworkPlayers[i].SendSetPositionMessage(m_HumanSpawnPoints[i].position);
+        }
 
         var ghostNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsGhost).ToList();
 
@@ -127,13 +166,8 @@ public class Game : MonoBehaviour
     {
         CurrentState = GameState.InProgress;
         StartTime = Time.time;
-        
-        foreach (var key in m_Keys)
-        {
-            key.gameObject.SetActive(true);
-        }
-        
-        m_Sandwich.SetActive(true);
+
+        ResetDoorKeyAndSandwich();
     }
 
     public void GotKey(int keyIndex)
@@ -142,7 +176,8 @@ public class Game : MonoBehaviour
         key.gameObject.SetActive(false);
 
         KeysLeft -= 1;
-
+        m_MainMenu.UpdateKeysLeft(KeysLeft);
+        
         if (KeysLeft <= 0)
         {
             foreach (var lockedDoor in m_LockedDoors)
@@ -183,7 +218,7 @@ public class Game : MonoBehaviour
     public void ResetDoorKeyAndSandwich()
     {
         foreach (var lockedDoor in m_LockedDoors)
-            lockedDoor.Open();
+            lockedDoor.Close();
 
         foreach (var key in m_Keys)
             key.SetActive(false);
@@ -191,6 +226,7 @@ public class Game : MonoBehaviour
         m_Sandwich.SetActive(false);
 
         KeysLeft = m_Keys.Count;
+        m_MainMenu.UpdateKeysLeft(KeysLeft);
     }
 
     public List<NetworkPlayer> GetNetworkPlayers()
