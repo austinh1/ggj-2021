@@ -134,6 +134,7 @@ public class PossessObject : MonoBehaviour
     {
         if (!PhotonView.Owner.Equals(player)) return;
 
+        PlayerController.PlayerAnimator.enabled = false;
         PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
         pObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
@@ -145,6 +146,7 @@ public class PossessObject : MonoBehaviour
     {
         if (!PhotonView.Owner.Equals(player)) return;
 
+        PlayerController.PlayerAnimator.enabled = true;
         PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
         pObject.transform.position = transform.position;
         pObject.SpriteRenderer.enabled = true;
