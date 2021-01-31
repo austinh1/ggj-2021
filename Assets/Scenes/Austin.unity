@@ -2504,21 +2504,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2971665778391533565, guid: b7f1c9351247e104687a6f535d153db7,
-        type: 3}
-      propertyPath: Loop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2971665778391533565, guid: b7f1c9351247e104687a6f535d153db7,
-        type: 3}
-      propertyPath: Priority
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5397762505757233312, guid: b7f1c9351247e104687a6f535d153db7,
-        type: 3}
-      propertyPath: Priority
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5397762505757233313, guid: b7f1c9351247e104687a6f535d153db7,
         type: 3}
       propertyPath: m_Name
