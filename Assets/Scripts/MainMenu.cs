@@ -23,6 +23,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text m_Connecting;
     [SerializeField] private TMP_Text m_HumansWin;
     [SerializeField] private TMP_Text m_GhostsWin;
+    [SerializeField] private TMP_Text m_Joining;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
@@ -66,6 +67,8 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             m_StartButton.gameObject.SetActive(false);
             m_Game.StartGameMaster();
+
+            PhotonNetwork.CurrentRoom.MaxPlayers = (byte)PhotonNetwork.PlayerList.Length;
         });
         
         m_Rematch.onClick.AddListener(delegate
@@ -116,9 +119,12 @@ public class MainMenu : MonoBehaviourPunCallbacks
             do
             {
                 RoomCode.Value = RandomString(4);
-                success = PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions());
+                success = PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions() { MaxPlayers = 10 });
                 attempt++;
             } while (!success && attempt < 5);
+            
+            m_JoinOrCreateRoom.SetActive(false);
+            m_Joining.gameObject.SetActive(true);
         }
 
         void JoinRoom()
@@ -134,6 +140,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
             
             RoomCode.Value = m_RoomCodeField.text.ToUpper();
             PhotonNetwork.JoinRoom(RoomCode.Value);
+            
+            m_JoinOrCreateRoom.SetActive(false);
+            m_Joining.gameObject.SetActive(true);
         }
 
         bool ValidateUsername()
@@ -189,6 +198,8 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log($"Error joining room: {returnCode}, {message}");
         
         m_Error.text = $"Couldn't find room {m_RoomCodeField.text}!";
+        m_JoinOrCreateRoom.gameObject.SetActive(true);
+        m_Joining.gameObject.SetActive(false);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -214,9 +225,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log($"Joined room {RoomCode.Value}");
         
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
-        m_JoinOrCreateRoom.SetActive(false);
         m_LeaveButton.gameObject.SetActive(true);
-        
+        m_Joining.gameObject.SetActive(false);
+
         m_Game.JoinRoom();
     }
 
@@ -265,16 +276,21 @@ public class MainMenu : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             m_Rematch.gameObject.SetActive(true);
-            m_ShuffleHuman.gameObject.SetActive(true);   
+            m_ShuffleHuman.gameObject.SetActive(true);
         }
     }
 
     public void RestartGame()
     {
         m_Game.RestartGame();
-            
+
         if (PhotonNetwork.IsMasterClient)
-            m_StartButton.gameObject.SetActive(true);
+        {
+            PhotonNetwork.CurrentRoom.MaxPlayers = 10;
+            
+            if (PhotonNetwork.PlayerList.Length > 1)
+                m_StartButton.gameObject.SetActive(true);
+        }
             
         m_HumansWin.gameObject.SetActive(false);
         m_GhostsWin.gameObject.SetActive(false);

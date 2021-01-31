@@ -59,6 +59,8 @@ public class Game : MonoBehaviour
         }
 
         m_MainMenu.NetworkPlayer = NetworkPlayer;
+        
+        ResetDoorKeyAndSandwich();
     }
 
     public void LeaveRoom()
@@ -161,6 +163,11 @@ public class Game : MonoBehaviour
     {
         CurrentState = GameState.Lobby;
 
+        ResetDoorKeyAndSandwich();
+    }
+
+    public void ResetDoorKeyAndSandwich()
+    {
         foreach (var lockedDoor in m_LockedDoors)
             lockedDoor.SetActive(true);
 
