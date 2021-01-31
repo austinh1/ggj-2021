@@ -69,6 +69,10 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         {
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
+
+            // TODO: Determine whether the player was behind the ghost or not and adjust sprite accordingly
+            bool fromBehind = true;
+            nearestPlayer.PlayerAnimator.SetBool("FromBehind", fromBehind);
             nearestPlayer.PlayerAnimator.SetTrigger("Slapped");
         }
     }
