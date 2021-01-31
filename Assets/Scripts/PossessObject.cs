@@ -170,6 +170,4 @@ public class PossessObject : MonoBehaviour
         PlayerSprite.sprite = PlayerController.PlayerSprite;
         NetworkPlayer.ShowUsername();
     }
-    
-    
 }

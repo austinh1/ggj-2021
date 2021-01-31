@@ -9,7 +9,7 @@ showPackageIndexes = false
 showStatusBar = false
 debounceMs = 250
 scopes = {
-	"last_search.B6046BBC" = "Input Manager"
+	"last_search.B6046BBC" = "player"
 	"asset.B6046BBC" = "True"
 	"menu.B6046BBC" = "True"
 	"scene.B6046BBC" = "True"
@@ -62,6 +62,7 @@ providers = {
 	}
 }
 recentSearches = [
+	"player"
 	"Input Manager"
 	"input manager"
 	"package manager"

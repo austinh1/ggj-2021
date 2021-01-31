@@ -20,6 +20,9 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     [Range(0, 10)]
     public int dashCooldownSeconds = 3;
     
+    [Range(0, 10)]
+    public float accelSpeed = 5f;
+    
     private NetworkPlayer m_NetworkPlayer;
 
     private NetworkPlayer NetworkPlayer
@@ -60,7 +63,8 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         
         var boost = new Vector2(dashBoost, dashBoost) * dashDir;
         var move = new Vector2(inputX, inputY).normalized * speed;
-        rigidbody2D.velocity = move + boost;
+        var desiredVelocity = move + boost;
+        rigidbody2D.velocity = Vector3.Lerp(rigidbody2D.velocity, desiredVelocity, accelSpeed * Time.deltaTime);
 
         // Only allow dashing while moving and it's not on cooldown
         if (Input.GetKeyDown(KeyCode.Space) && dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
