@@ -146,9 +146,10 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         }
         else
         {
-            // Slap them back to humanity!PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
-        PlayerController.PlayerAnimator.SetTrigger("Slapped");
-        IsConverting = true;
+            // Slap them back to humanity!
+            PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
+            PlayerController.PlayerAnimator.SetTrigger("Slapped");
+            IsConverting = true;
         }
     }
 
