@@ -4,10 +4,19 @@
     <list default="true" id="775fb3b5-b883-435a-a6a4-07c65845e392" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Global Game Jam 2021/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Game.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Game.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Managers.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Managers.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Austin.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Austin.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/PossessObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/PossessObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Decorations/counter.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Decorations/counter.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Decorations/desk-center.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Decorations/desk-center.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Decorations/desk-edge.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Decorations/desk-edge.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Decorations/filing-cabinet.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Decorations/filing-cabinet.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Decorations/fridge.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Decorations/fridge.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Interactables/printer.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Interactables/printer.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Interactables/watercooler.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Interactables/watercooler.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Walls/door.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Walls/door.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/tileset_legacy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/tileset_legacy.png.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +39,44 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/HumanController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/PossessObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/HumanController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Resources/Player.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/PossessObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/LockedDoor.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/HumanController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/Game.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Key.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/HumanController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Resources/Player.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Key.prefab.meta" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/Key.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/PossessObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/NetworkPlayer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/Key.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/PossessObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Sprites/geist-2.png.meta" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/Managers.prefab" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/NetworkPlayer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/MainMenu.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/NetworkPlayer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Prefabs/LockedDoor.prefab.meta" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://I:/Global Game Jam 2021/Assets/Scripts/MainMenu.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -78,10 +125,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="59120">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="59120" />
+      <option name="pid" />
       <option name="selectedOptions">
         <list />
       </option>

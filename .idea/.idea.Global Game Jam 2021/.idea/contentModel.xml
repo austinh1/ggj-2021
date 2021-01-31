@@ -350,9 +350,11 @@
         </e>
         <e p="PossessionObject.cs" t="Include" />
         <e p="Scripts" t="Include">
+          <e p="AnimationEvents.cs" t="Include" />
           <e p="CameraFollow.cs" t="Include" />
           <e p="Game.cs" t="Include" />
           <e p="GhostController.cs" t="Include" />
+          <e p="GhostSlappedEnd.cs" t="Include" />
           <e p="HumanController.cs" t="Include" />
           <e p="Interactable.cs" t="Include" />
           <e p="IPlayerMovement.cs" t="Include" />
