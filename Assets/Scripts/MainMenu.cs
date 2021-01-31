@@ -16,12 +16,13 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_LeaveButton;
     [SerializeField] private Button m_StartButton;
     [SerializeField] private Button m_Rematch;
+    [SerializeField] private Button m_ShuffleHuman;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
     [SerializeField] private TMP_Text m_Connecting;
-    [SerializeField] private TMP_Text m_Win;
-    [SerializeField] private TMP_Text m_Lose;
+    [SerializeField] private TMP_Text m_HumansWin;
+    [SerializeField] private TMP_Text m_GhostsWin;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
@@ -69,8 +70,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         
         m_Rematch.onClick.AddListener(delegate
         {
-            RestartGame();
-            NetworkPlayer.SendRestartGameMessage();
+            PlayAgain();
             
             var networkPlayers = m_Game.GetNetworkPlayers();
             
@@ -78,9 +78,30 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
             foreach (var networkPlayer in originallyGhostNetworkPlayers)
                 networkPlayer.SendMakeIntoGhostMessage();
-            
+
             m_Game.PositionHumanAndGhosts();
         });
+        
+        m_ShuffleHuman.onClick.AddListener(delegate
+        {
+            PlayAgain();
+            
+            var networkPlayers = m_Game.GetNetworkPlayers();
+            
+            foreach (var networkPlayer in networkPlayers)
+                networkPlayer.SendMakeIntoGhostMessage();
+
+            var randomPlayerIndex = UnityEngine.Random.Range(0, networkPlayers.Count);
+            var randomPlayer = networkPlayers[randomPlayerIndex];
+            
+            randomPlayer.SendMakeIntoHumanAndPositionEveryoneMessage();
+        });
+
+        void PlayAgain()
+        {
+            RestartGame();
+            NetworkPlayer.SendRestartGameMessage();
+        }
         
         PhotonNetwork.ConnectUsingSettings();
 
@@ -209,9 +230,10 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(true);
         m_LeaveButton.gameObject.SetActive(false);
         m_StartButton.gameObject.SetActive(false);
-        m_Win.gameObject.SetActive(false);
-        m_Lose.gameObject.SetActive(false);
+        m_HumansWin.gameObject.SetActive(false);
+        m_GhostsWin.gameObject.SetActive(false);
         m_Rematch.gameObject.SetActive(false);
+        m_ShuffleHuman.gameObject.SetActive(false);
         m_Error.text = string.Empty;
         
         m_Game.LeaveRoom();
@@ -224,24 +246,27 @@ public class MainMenu : MonoBehaviourPunCallbacks
             .Select(s => s[Random.Next(s.Length)]).ToArray());
     }
 
-    public void OpenWin()
+    public void OpenHumansWin()
     {
-        m_Win.gameObject.SetActive(true);
-        m_Lose.gameObject.SetActive(false);
+        m_HumansWin.gameObject.SetActive(true);
+        m_GhostsWin.gameObject.SetActive(false);
         OpenRematch();
     }
 
-    public void OpenLose()
+    public void OpenGhostsWin()
     {
-        m_Lose.gameObject.SetActive(true);
-        m_Win.gameObject.SetActive(false);
+        m_GhostsWin.gameObject.SetActive(true);
+        m_HumansWin.gameObject.SetActive(false);
         OpenRematch();
     }
 
     private void OpenRematch()
     {
         if (PhotonNetwork.IsMasterClient)
+        {
             m_Rematch.gameObject.SetActive(true);
+            m_ShuffleHuman.gameObject.SetActive(true);   
+        }
     }
 
     public void RestartGame()
@@ -251,8 +276,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
             m_StartButton.gameObject.SetActive(true);
             
-        m_Win.gameObject.SetActive(false);
-        m_Lose.gameObject.SetActive(false);
+        m_HumansWin.gameObject.SetActive(false);
+        m_GhostsWin.gameObject.SetActive(false);
         m_Rematch.gameObject.SetActive(false);
+        m_ShuffleHuman.gameObject.SetActive(false);
     }
 }

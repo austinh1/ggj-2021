@@ -101,9 +101,34 @@ public class NetworkPlayer : MonoBehaviour
         {
             Debug.Log($"Player {player.ActorNumber} was made into a human!");
             Player.MakeIntoHuman();
+
+            if (Game.CurrentState != Game.GameState.InProgress)
+                return;
+
+            var networkPlayers = Game.GetNetworkPlayers();
+            var ghostNetworkPlayers = networkPlayers.Where(np => np.GetComponent<PlayerController>().IsGhost);
+
+            if (!ghostNetworkPlayers.Any())
+            {
+                SendAllHumansMessage();
+            }
+        }
+    }
+    
+    public void SendMakeIntoHumanAndPositionEveryoneMessage()
+    {
+        PhotonView.RPC(nameof(MakeIntoHumanAndPositionEveryoneRPC), RpcTarget.AllBuffered, PhotonView.Owner);
+    }
+
+    [PunRPC]
+    public void MakeIntoHumanAndPositionEveryoneRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} was made into a human and everyone is positioned!");
+            Player.MakeIntoHuman();
             
-            // var photonViews = PhotonNetwork.
-            // var humanPhotonView = photonViews.Where(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsHuman);
+            Game.PositionHumanAndGhosts();
         }
     }
     
@@ -218,5 +243,23 @@ public class NetworkPlayer : MonoBehaviour
     public void HideUsername()
     {
         m_UsernameText.enabled = false;
+    }
+    
+    public void SendAllHumansMessage()
+    {
+        if (!IsLocal)
+            return;
+
+        Game.AllHumans();
+        PhotonView.RPC(nameof(AllHumansRPC), RpcTarget.Others, PhotonView.Owner);
+    }
+    
+    [PunRPC]
+    public void AllHumansRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Game.AllHumans();
+        }
     }
 }

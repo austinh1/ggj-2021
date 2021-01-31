@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GhostController : MonoBehaviour, IPlayerMovement
 {
-    
     [Range(0.0f, 10.0f)]
     public float speed = 5f;
 
@@ -95,11 +94,12 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         
         var boost = new Vector2(_dashBoost, _dashBoost) * _dashDir;
         var move = new Vector2(inputX, inputY).normalized * speed;
-        var desiredVelocity = move + boost;
+        var multiplier = (PossessObject.IsPossessing ? 0.5f : 1f);
+        var desiredVelocity = (move + boost) * new Vector2(multiplier, multiplier);
         Rigidbody2D.velocity = Vector3.Lerp(Rigidbody2D.velocity, desiredVelocity, accelSpeed * Time.deltaTime);
 
-        // Only allow dashing while moving and it's not on cooldown
-        if (Input.GetKeyDown(KeyCode.Space) && _dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0))
+        // Only allow dashing while moving, it's not on cooldown, and not possessing something
+        if (Input.GetKeyDown(KeyCode.Space) && _dashCooldown.Ticks <= 0 && (inputX != 0 || inputY != 0) && !PossessObject.IsPossessing)
         {
             _dashDir = new Vector2(Math.Sign(inputX), Math.Sign(inputY)).normalized;
             _dashBoost = dashSpeed;

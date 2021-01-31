@@ -86,8 +86,8 @@ public class Game : MonoBehaviour
     public void PositionHumanAndGhosts()
     {
         var networkPlayers = GetNetworkPlayers();
-        var humanPhotonView = networkPlayers.First(pv => pv.GetComponent<PlayerController>().IsHuman);
-        humanPhotonView.transform.position = m_HumanSpawnPoint.position;
+        var humanNetworkPlayer = networkPlayers.First(pv => pv.GetComponent<PlayerController>().IsHuman);
+        humanNetworkPlayer.SendSetPositionMessage(m_HumanSpawnPoint.position);
 
         var ghostNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsGhost).ToList();
 
@@ -143,10 +143,16 @@ public class Game : MonoBehaviour
     {
         CurrentState = GameState.Complete;
 
-        if (NetworkPlayer.Player.IsGhost)
-            m_MainMenu.OpenWin();
-        else
-            m_MainMenu.OpenLose();
+        m_MainMenu.OpenGhostsWin();
+        
+        m_Sandwich.SetActive(false);
+    }
+    
+    public void AllHumans()
+    {
+        CurrentState = GameState.Complete;
+
+        m_MainMenu.OpenHumansWin();
         
         m_Sandwich.SetActive(false);
     }
