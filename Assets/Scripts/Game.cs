@@ -161,7 +161,9 @@ public class Game : MonoBehaviour
             lockedDoor.SetActive(true);
 
         foreach (var key in m_Keys)
-            key.SetActive(true);
+            key.SetActive(false);
+        
+        m_Sandwich.SetActive(false);
 
         KeysLeft = m_Keys.Count;
     }

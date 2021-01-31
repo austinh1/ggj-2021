@@ -14,6 +14,19 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
     public AudioClip slapSound;
     public GameObject slapEffectPrefab;
+    
+    private NetworkPlayer m_NetworkPlayer;
+
+    private NetworkPlayer NetworkPlayer
+    {
+        get
+        {
+            if (m_NetworkPlayer == null)
+                m_NetworkPlayer = GetComponent<NetworkPlayer>();
+
+            return m_NetworkPlayer;
+        }
+    }
 
     private void Start()
     {
@@ -35,7 +48,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         if (Input.GetKeyDown(KeyCode.F))
         {
             playerController.PlayerAnimator.SetTrigger("Slapping");
-            Slap();
+            
+            if (NetworkPlayer.Game.CurrentState == Game.GameState.InProgress)
+                Slap();
         }
     }
 
@@ -68,7 +83,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             }
         }
 
-        if (nearestPlayer != null)
+        if (nearestPlayer != null )
         {
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
