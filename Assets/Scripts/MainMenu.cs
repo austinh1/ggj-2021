@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -125,7 +126,24 @@ public class MainMenu : MonoBehaviourPunCallbacks
             return true;
         }
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            EventSystem system = EventSystem.current;
+            Selectable next = system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+            if (next != null)
+            {
+                InputField inputfield = next.GetComponent<InputField>();
+                if (inputfield != null)
+                    inputfield.OnPointerClick(new PointerEventData(system));
+
+                system.SetSelectedGameObject(next.gameObject, new BaseEventData(system));
+            }
+        }
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("CONNECTED");
