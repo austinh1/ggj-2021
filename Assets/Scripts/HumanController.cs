@@ -85,7 +85,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             // Play slap sound effect and create visual
             var audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(slapSound);
-            Instantiate(slapEffectPrefab, nearestPlayer.transform.position, Quaternion.identity);
+            Instantiate(slapEffectPrefab, nearestPlayer.transform.position + new Vector3(0.6f, 0.6f, 0), Quaternion.identity);
         }
     }
 }
