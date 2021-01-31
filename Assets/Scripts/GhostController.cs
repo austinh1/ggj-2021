@@ -4,11 +4,10 @@ using UnityEngine;
 public class GhostController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
+    private PlayerController playerController;
     private TimeSpan dashCooldown = new TimeSpan(0);
     private Vector2 dashDir;
     private float dashBoost = 0f;
-
-    public Sprite[] sprites;
 
     [Range(0.0f, 10.0f)]
     public float speed = 5f;
@@ -35,6 +34,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        playerController = GetComponent<PlayerController>();
     }
     
     void Update()
