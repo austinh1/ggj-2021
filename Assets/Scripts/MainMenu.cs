@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             PlayAgain();
 
-            StartCoroutine(Blah());
+            StartCoroutine(Shuffle());
         });
 
         m_MuteButton.onClick.AddListener(delegate
@@ -163,7 +164,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         }
     }
 
-    private IEnumerator Blah()
+    private IEnumerator Shuffle()
     {
         var networkPlayers = m_Game.GetNetworkPlayers();
         var previousHumanPlayers = networkPlayers.Where(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
@@ -177,19 +178,20 @@ public class MainMenu : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(.1f);
         
         var ghostsWithoutPreviousHumans = networkPlayers.Where(np => !previousHumanPlayers.Contains(np)).ToList();
+        var shuffledGhosts = ghostsWithoutPreviousHumans.OrderBy(a => Guid.NewGuid()).ToList();
 
         m_Game.TotalPlayerToStartingHumansMap.TryGetValue(networkPlayers.Count, out var humanCount);
         for (var i = 0; i < humanCount; i++)
         {
-            ghostsWithoutPreviousHumans[i].SendMakeIntoHumanMessage();
-            ghostsWithoutPreviousHumans[i].SendSetOriginallyGhostMessage(false);                
+            shuffledGhosts[i].SendMakeIntoHumanMessage();
+            shuffledGhosts[i].SendSetOriginallyGhostMessage(false);                
         }
         
         yield return new WaitForSeconds(.1f);
         
         m_Game.PositionHumanAndGhosts();
     }
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
