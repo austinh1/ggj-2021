@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_StartButton;
     [SerializeField] private Button m_Rematch;
     [SerializeField] private Button m_ShuffleHuman;
+    [SerializeField] private Button m_MuteButton;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
@@ -98,8 +100,16 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             PlayAgain();
 
-            StartCoroutine(Blah());
+            StartCoroutine(Shuffle());
+        });
 
+        m_MuteButton.onClick.AddListener(delegate
+        {
+            var audioSources = m_MuteButton.GetComponentsInChildren<AudioSource>();
+            foreach(AudioSource source in audioSources)
+            {
+                source.enabled = !source.enabled;
+            }
         });
 
         void PlayAgain()
@@ -137,9 +147,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
         }
             
         if (!flag)
-        {
             m_Error.text = "Room name already exists, choose a different name.";
-            return false;
+
+        if (string.IsNullOrEmpty(m_NewRoomCodeField.text)){
+            m_Error.text = "Room name cannot be empty. Choose a name.";
+            flag = false;
         }
 
         return flag;
@@ -169,7 +181,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_Joining.gameObject.SetActive(true);
     }
 
-    private IEnumerator Blah()
+    private IEnumerator Shuffle()
     {
         var networkPlayers = m_Game.GetNetworkPlayers();
         var previousHumanPlayers = networkPlayers.Where(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
@@ -183,18 +195,20 @@ public class MainMenu : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(.1f);
         
         var ghostsWithoutPreviousHumans = networkPlayers.Where(np => !previousHumanPlayers.Contains(np)).ToList();
+        var shuffledGhosts = ghostsWithoutPreviousHumans.OrderBy(a => Guid.NewGuid()).ToList();
 
         m_Game.TotalPlayerToStartingHumansMap.TryGetValue(networkPlayers.Count, out var humanCount);
         for (var i = 0; i < humanCount; i++)
         {
-            ghostsWithoutPreviousHumans[i].SendMakeIntoHumanMessage();
+            shuffledGhosts[i].SendMakeIntoHumanMessage();
+            shuffledGhosts[i].SendSetOriginallyGhostMessage(false);                
         }
         
         yield return new WaitForSeconds(.1f);
         
         m_Game.PositionHumanAndGhosts();
     }
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -293,6 +307,13 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_Error.text = string.Empty;
         
         m_Game.LeaveRoom();
+    }
+    
+    private static string RandomString(int length)
+    {
+        const string chars = "ACDEFGHJKLPRTUWXY12346789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[Random.Next(s.Length)]).ToArray());
     }
 
     public void OpenHumansWin()
