@@ -5,6 +5,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
     private PlayerController playerController;
+    private SpriteRenderer renderer;
 
     [Range(0.0f, 10.0f)]
     public float speed = 7f;
@@ -32,6 +33,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
+        renderer = transform.Find("HumanSprite").GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -45,12 +47,17 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
         rigidbody2D.velocity = direction.normalized * speed;
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.F))
         {
             playerController.PlayerAnimator.SetTrigger("Slapping");
             
             if (NetworkPlayer.Game.CurrentState == Game.GameState.InProgress)
                 Slap();
+        }
+
+        if (rigidbody2D.velocity.x != 0)
+        {
+           renderer.flipX = rigidbody2D.velocity.x < 0;
         }
     }
 
@@ -61,7 +68,6 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
     private void Slap()
     {
-        Debug.Log("Attempt slap...");
         PlayerController nearestPlayer = null;
         var closestDistance = float.PositiveInfinity;
         var players = GameObject.FindGameObjectsWithTag("Player");
@@ -88,10 +94,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
 
-            var slappedRigidBody = nearestPlayer.GetComponent<Rigidbody2D>();
+            var slappedSpriteRenderer = nearestPlayer.transform.Find("GhostSprite").GetComponent<SpriteRenderer>();
             // Determine whether the player was behind the ghost or not and adjust sprite accordingly
-            // This actually gets the direction they are moving rather than "facing". We don't have a facing direction right now.
-            var slappedFacingDir = slappedRigidBody.velocity.x != 0 ? Math.Sign(slappedRigidBody.velocity.x) : Math.Sign(slappedRigidBody.transform.localScale.x);
+            var slappedFacingDir = slappedSpriteRenderer.flipX ? -1 : 1;
             var dirToSlapped = Math.Sign(nearestPlayer.transform.position.x - transform.position.x);
             bool fromBehind = slappedFacingDir == dirToSlapped;
             nearestPlayer.PlayerAnimator.SetBool("FromBehind", fromBehind);

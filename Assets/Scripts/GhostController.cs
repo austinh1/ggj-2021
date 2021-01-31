@@ -5,6 +5,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
     private PlayerController playerController;
+    private SpriteRenderer renderer;
     private TimeSpan dashCooldown = new TimeSpan(0);
     private Vector2 dashDir;
     private float dashBoost = 0f;
@@ -48,6 +49,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
+        renderer = transform.Find("GhostSprite").GetComponent<SpriteRenderer>();
     }
     
     void Update()
@@ -80,6 +82,11 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         if (dashCooldown > TimeSpan.Zero)
         {
             dashCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
+        }
+
+        if (rigidbody2D.velocity.x != 0)
+        {
+            renderer.flipX = rigidbody2D.velocity.x < 0;
         }
     }
 

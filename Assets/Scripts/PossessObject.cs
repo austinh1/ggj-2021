@@ -98,7 +98,7 @@ public class PossessObject : MonoBehaviour
         
         if(!IsPossessing) CheckForPossessionObjects();
 
-        if (!Input.GetKeyDown(KeyCode.LeftShift)) return;
+        if (!Input.GetKeyDown(KeyCode.F)) return;
 
         if (!IsPossessing)
         {

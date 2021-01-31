@@ -65,7 +65,7 @@ namespace Photon.Pun.UtilityScripts
         /// <summary>Checks for shift+tab input combination (to toggle statsOn).</summary>
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Tab) && Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.Tab) && Input.GetKey(KeyCode.F))
             {
                 this.statsWindowOn = !this.statsWindowOn;
                 this.statsOn = true;    // enable stats when showing the window
