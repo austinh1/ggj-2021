@@ -26,9 +26,10 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
     [SerializeField] private TMP_Text m_Connecting;
-    [SerializeField] private TMP_Text m_HumansWin;
-    [SerializeField] private TMP_Text m_GhostsWin;
+    [SerializeField] private GameObject m_HumansWin;
+    [SerializeField] private GameObject m_GhostsWin;
     [SerializeField] private TMP_Text m_Joining;
+    [SerializeField] private TMP_Text m_KeysLeft;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
@@ -95,22 +96,8 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_ShuffleHuman.onClick.AddListener(delegate
         {
             PlayAgain();
-            
-            var networkPlayers = m_Game.GetNetworkPlayers();
-            var previousHumanPlayer = networkPlayers.First(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
 
-            foreach (var networkPlayer in networkPlayers)
-            {
-                networkPlayer.SendMakeIntoGhostMessage();
-                networkPlayer.SendSetOriginallyGhostMessage(true);                
-            }
-
-            var ghostsWithoutPreviousHuman = networkPlayers.Where(np => !np.Equals(previousHumanPlayer)).ToList();
-            var randomPlayerIndex = UnityEngine.Random.Range(0, ghostsWithoutPreviousHuman.Count);
-            var randomPlayer = ghostsWithoutPreviousHuman[randomPlayerIndex];
-            
-            randomPlayer.SendMakeIntoHumanAndPositionEveryoneMessage();
-            randomPlayer.SendSetOriginallyGhostMessage(false);                
+            StartCoroutine(Blah());
 
         });
 
@@ -179,6 +166,32 @@ public class MainMenu : MonoBehaviourPunCallbacks
             
         m_JoinOrCreateRoom.SetActive(false);
         m_Joining.gameObject.SetActive(true);
+    }
+
+    private IEnumerator Blah()
+    {
+        var networkPlayers = m_Game.GetNetworkPlayers();
+        var previousHumanPlayers = networkPlayers.Where(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
+
+        foreach (var networkPlayer in networkPlayers)
+        {
+            networkPlayer.SendMakeIntoGhostMessage();
+            networkPlayer.SendSetOriginallyGhostMessage(true);                
+        }
+
+        yield return new WaitForSeconds(.1f);
+        
+        var ghostsWithoutPreviousHumans = networkPlayers.Where(np => !previousHumanPlayers.Contains(np)).ToList();
+
+        m_Game.TotalPlayerToStartingHumansMap.TryGetValue(networkPlayers.Count, out var humanCount);
+        for (var i = 0; i < humanCount; i++)
+        {
+            ghostsWithoutPreviousHumans[i].SendMakeIntoHumanMessage();
+        }
+        
+        yield return new WaitForSeconds(.1f);
+        
+        m_Game.PositionHumanAndGhosts();
     }
 
     private void Update()
@@ -369,5 +382,10 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
             index++;
         }
+    }
+
+    public void UpdateKeysLeft(int keysLeft)
+    {
+        m_KeysLeft.text = keysLeft.ToString();
     }
 }
