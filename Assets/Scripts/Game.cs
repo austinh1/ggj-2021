@@ -24,6 +24,11 @@ public class Game : MonoBehaviour
     private void Start()
     {
         KeysLeft = m_Keys.Count;
+
+        foreach (var key in m_Keys)
+        {
+            key.gameObject.SetActive(false);
+        }
     }
 
     public void JoinRoom()
@@ -89,6 +94,11 @@ public class Game : MonoBehaviour
     public void SetGameStateToInProgress()
     {
         CurrentState = GameState.InProgress;
+        
+        foreach (var key in m_Keys)
+        {
+            key.gameObject.SetActive(true);
+        }
     }
 
     public void GotKey(int keyIndex)
