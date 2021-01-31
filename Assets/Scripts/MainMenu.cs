@@ -168,17 +168,14 @@ public class MainMenu : MonoBehaviourPunCallbacks
     {
         var networkPlayers = m_Game.GetNetworkPlayers();
         var previousHumanPlayers = networkPlayers.Where(np => np.GetComponent<PlayerController>().IsHuman && !np.OriginallyGhost);
+        var ghostsWithoutPreviousHumans = networkPlayers.Where(np => !previousHumanPlayers.Contains(np)).ToList();
+        var shuffledGhosts = ghostsWithoutPreviousHumans.OrderBy(a => Guid.NewGuid()).ToList();
 
         foreach (var networkPlayer in networkPlayers)
         {
             networkPlayer.SendMakeIntoGhostMessage();
             networkPlayer.SendSetOriginallyGhostMessage(true);                
         }
-
-        yield return new WaitForSeconds(.1f);
-        
-        var ghostsWithoutPreviousHumans = networkPlayers.Where(np => !previousHumanPlayers.Contains(np)).ToList();
-        var shuffledGhosts = ghostsWithoutPreviousHumans.OrderBy(a => Guid.NewGuid()).ToList();
 
         m_Game.TotalPlayerToStartingHumansMap.TryGetValue(networkPlayers.Count, out var humanCount);
         for (var i = 0; i < humanCount; i++)
