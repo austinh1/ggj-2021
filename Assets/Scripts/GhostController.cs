@@ -77,6 +77,9 @@ public class GhostController : MonoBehaviour, IPlayerMovement
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!enabled)
+            return;
+        
         var key = other.GetComponent<Key>();
         if (key != null)
         {

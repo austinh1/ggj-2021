@@ -448,8 +448,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6e09ab0bf6a5a429d59624e81caff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  dashSpeed: 10
+  speed: 3
+  dashSpeed: 6
   dashCooldownSeconds: 3
 --- !u!114 &8207299999248462735
 MonoBehaviour:
@@ -463,7 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3d9a5411d605340988c465c0c7711c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 5
   slapRange: 2
 --- !u!114 &3209926602289484202
 MonoBehaviour:
