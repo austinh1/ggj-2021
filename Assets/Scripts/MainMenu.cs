@@ -12,10 +12,14 @@ using Random = System.Random;
 
 public class MainMenu : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private TMP_InputField m_RoomCodeField;
+    [SerializeField] private GameObject _roomEntryPrefab;
+    [SerializeField] private Transform _roomEntryParent;
+    [SerializeField] private List<GameObject> _roomEntries;
+    
+    [SerializeField] private TMP_InputField m_NewRoomCodeField;
     [SerializeField] private TMP_InputField m_UsernameField;
     [SerializeField] private Button m_CreateButton;
-    [SerializeField] private Button m_JoinButton;
+
     [SerializeField] private Button m_LeaveButton;
     [SerializeField] private Button m_StartButton;
     [SerializeField] private Button m_Rematch;
@@ -32,6 +36,10 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
+    private readonly Dictionary<string, RoomInfo> _cachedRoomList = new Dictionary<string, RoomInfo>();
+
+    public Dictionary<string, RoomInfo> CachedRoomList => _cachedRoomList;
+    
     public string Username { get; private set; }
 
     private Observable<string> RoomCode { get; } = new Observable<string>();
@@ -44,15 +52,13 @@ public class MainMenu : MonoBehaviourPunCallbacks
     
     private void Start()
     {
-        m_RoomCodeField.onSubmit.AddListener(delegate
+        m_NewRoomCodeField.onSubmit.AddListener(delegate
         {
-            JoinRoom();
+            CreateRoom();
         });
         
         m_CreateButton.onClick.AddListener(CreateRoom);
-        
-        m_JoinButton.onClick.AddListener(JoinRoom);
-        
+
         RoomCode.OnChange.AddListener(delegate(string oldRoomName, string newRoomName)
         {
             m_RoomCode.text = newRoomName;
@@ -113,55 +119,66 @@ public class MainMenu : MonoBehaviourPunCallbacks
         }
         
         PhotonNetwork.ConnectUsingSettings();
+        
+    }
+    
+    void CreateRoom()
+    {
+        if (!ValidateUsername())
+            return;
 
-        void CreateRoom()
-        {
-            if (!ValidateUsername())
-                return;
+        if (!ValidateRoomName())
+            return;
 
-            // Generate a random string and attempt to make room a few times, to greatly reduce the risk of random string collisions causing a failed room create.
-            bool success = false;
-            int attempt = 0;
-            do
-            {
-                RoomCode.Value = RandomString(4);
-                success = PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions() { MaxPlayers = 10 });
-                attempt++;
-            } while (!success && attempt < 5);
+        RoomCode.Value = m_NewRoomCodeField.text;
+        PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions() { MaxPlayers = 10 });
             
-            m_JoinOrCreateRoom.SetActive(false);
-            m_Joining.gameObject.SetActive(true);
+        m_JoinOrCreateRoom.SetActive(false);
+        m_Joining.gameObject.SetActive(true);
+    }
+
+    bool ValidateRoomName()
+    {
+        var flag = true;
+
+        foreach (var kvp in CachedRoomList){
+            if (kvp.Key == m_NewRoomCodeField.text) 
+                flag = false;
+        }
+            
+        if (!flag)
+            m_Error.text = "Room name already exists, choose a different name.";
+
+        if (string.IsNullOrEmpty(m_NewRoomCodeField.text)){
+            m_Error.text = "Room name cannot be empty. Choose a name.";
+            flag = false;
         }
 
-        void JoinRoom()
+        return flag;
+    }
+    
+    bool ValidateUsername()
+    {
+        if (string.IsNullOrEmpty(m_UsernameField.text))
         {
-            if (!ValidateUsername())
-                return;
-            
-            if (string.IsNullOrEmpty(m_RoomCodeField.text))
-            {
-                m_Error.text = "No room code has been entered!";
-                return;
-            }
-            
-            RoomCode.Value = m_RoomCodeField.text.ToUpper();
-            PhotonNetwork.JoinRoom(RoomCode.Value);
-            
-            m_JoinOrCreateRoom.SetActive(false);
-            m_Joining.gameObject.SetActive(true);
+            m_Error.text = "No username has been entered!";
+            return false;
         }
 
-        bool ValidateUsername()
-        {
-            if (string.IsNullOrEmpty(m_UsernameField.text))
-            {
-                m_Error.text = "No username has been entered!";
-                return false;
-            }
+        Username = m_UsernameField.text;
+        return true;
+    }
+    
+    public void JoinRoom(string roomName)
+    {
+        if (!ValidateUsername())
+            return;
 
-            Username = m_UsernameField.text;
-            return true;
-        }
+        RoomCode.Value = roomName;
+        PhotonNetwork.JoinRoom(RoomCode.Value);
+            
+        m_JoinOrCreateRoom.SetActive(false);
+        m_Joining.gameObject.SetActive(true);
     }
 
     private IEnumerator Shuffle()
@@ -211,12 +228,20 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log("CONNECTED");
         m_Connecting.gameObject.SetActive(false);
         m_JoinOrCreateRoom.SetActive(true);
+        
+        if (!PhotonNetwork.InLobby)
+            PhotonNetwork.JoinLobby();
+        
     }
 
     private void OnGUI()
     {
         if(PhotonNetwork.IsConnected)
             GUILayout.Label($"{PhotonNetwork.CountOfRooms} rooms active. {PhotonNetwork.CountOfPlayers} players active. {PhotonNetwork.CountOfPlayersInRooms} players in rooms.");
+
+        foreach (var kvp in CachedRoomList){
+            GUILayout.Label($"{kvp.Key} : {kvp.Value.PlayerCount}");
+        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -228,7 +253,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     {
         Debug.Log($"Error joining room: {returnCode}, {message}");
         
-        m_Error.text = $"Couldn't find room {m_RoomCodeField.text}!";
+        m_Error.text = $"Couldn't find room {m_NewRoomCodeField.text}!";
         m_JoinOrCreateRoom.gameObject.SetActive(true);
         m_Joining.gameObject.SetActive(false);
     }
@@ -327,6 +352,57 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_GhostsWin.gameObject.SetActive(false);
         m_Rematch.gameObject.SetActive(false);
         m_ShuffleHuman.gameObject.SetActive(false);
+    }
+    
+    private void UpdateCachedRoomList(List<RoomInfo> roomList)
+    {
+        for(int i=0; i<roomList.Count; i++)
+        {
+            RoomInfo info = roomList[i];
+            if (info.RemovedFromList)
+            {
+                CachedRoomList.Remove(info.Name);
+            }
+            else
+            {
+                CachedRoomList[info.Name] = info;
+            }
+        }
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        ClearRoomListView();
+        
+        UpdateCachedRoomList(roomList);
+        UpdateRoomListView();
+    }
+
+    private void ClearRoomListView()
+    {
+        foreach (var roomEntry in _roomEntries){
+            Destroy(roomEntry);
+        }
+        
+        _roomEntries.Clear();
+    }
+    
+    private void UpdateRoomListView()
+    {
+        var index = 1;
+        foreach (var info in CachedRoomList.Values)
+        {
+            var entry = Instantiate(_roomEntryPrefab, _roomEntryParent, false);
+            entry.transform.localScale = Vector3.one;
+            entry.transform.localPosition = new Vector3(370, index * -50, 0);
+            entry.GetComponent<RoomEntry>().Init(info.Name, info.PlayerCount, info.MaxPlayers);
+
+            _roomEntries.Add(entry);
+
+            index++;
+        }
+        
+        _roomEntryParent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 35 + (index*50));
     }
 
     public void UpdateKeysLeft(int keysLeft)
