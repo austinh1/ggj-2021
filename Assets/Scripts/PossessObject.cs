@@ -112,7 +112,7 @@ public class PossessObject : MonoBehaviour
 
         if (!IsPossessing)
         {
-            if (NearestPossessionObject != null)
+            if (NearestPossessionObject != null && possessCooldown <= TimeSpan.Zero)
             {
                 PossessNearestObject();
             }
