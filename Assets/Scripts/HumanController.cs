@@ -10,7 +10,6 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     [Range(0.0f, 10.0f)]
     public float slapRange = 2f;
 
-    public AudioClip slapSound;
     public GameObject slapEffectPrefab;
     
     private Rigidbody2D _rigidbody2D;
@@ -137,8 +136,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             nearestPlayer.GetComponent<GhostController>().GetSlapped(fromBehind);
 
             // Play slap sound effect and create visual
-            var audioSource = GetComponent<AudioSource>();
-            audioSource.PlayOneShot(slapSound);
+            PlayerController.PlaySlapSound();
             Instantiate(slapEffectPrefab, nearestPlayer.transform.position + new Vector3(0.6f, 0.6f, 0), Quaternion.identity);
         }
     }

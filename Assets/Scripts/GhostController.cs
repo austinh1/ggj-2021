@@ -139,6 +139,8 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
         PlayerController.PlayerAnimator.SetTrigger("Slapped");
         IsConverting = true;
+        
+        PlayerController.PlaySlapSound();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

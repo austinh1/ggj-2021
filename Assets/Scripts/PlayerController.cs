@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
+    public AudioClip slapSound;
+
     private GhostController m_GhostController;
 
     private GhostController GhostController
@@ -134,6 +136,12 @@ public class PlayerController : MonoBehaviour
         }
 
         PlayerSpriteRenderer.flipX = flipX;
+    }
+
+    public void PlaySlapSound()
+    {
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(slapSound);
     }
     
     #region PunRPCs

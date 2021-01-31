@@ -467,7 +467,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   slapRange: 1.5
-  slapSound: {fileID: 8300000, guid: cff94e7d0f19af74394c227f3e2d02ed, type: 3}
   slapEffectPrefab: {fileID: 5747040656429453265, guid: 5b1edc927d4e0914aa0784a953f4ec04,
     type: 3}
 --- !u!114 &3209926602289484202
@@ -482,6 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73d5d9997a81429fa547ebae3b0920bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slapSound: {fileID: 8300000, guid: cff94e7d0f19af74394c227f3e2d02ed, type: 3}
 --- !u!82 &-8034503377351712564
 AudioSource:
   m_ObjectHideFlags: 0
