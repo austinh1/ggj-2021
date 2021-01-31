@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class GhostController : MonoBehaviour, IPlayerMovement
@@ -139,7 +140,6 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
         PlayerController.PlayerAnimator.SetTrigger("Slapped");
         IsConverting = true;
-        
         PlayerController.PlaySlapSound();
     }
 
@@ -152,5 +152,19 @@ public class GhostController : MonoBehaviour, IPlayerMovement
             NetworkPlayer.SendGotKeyMessage(other.gameObject);
         else if (other.CompareTag("Sandwich"))
             NetworkPlayer.SendGotSandwichMessage();
+    }
+    
+    public void SendGetSlappedMessage(bool fromBehind)
+    {
+        PhotonView.RPC(nameof(GetSlappedRPC), RpcTarget.Others,PhotonView.Owner, fromBehind);
+    }
+
+    [PunRPC]
+    public void GetSlappedRPC(Player player, bool fromBehind)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            GetSlapped(fromBehind);
+        }
     }
 }

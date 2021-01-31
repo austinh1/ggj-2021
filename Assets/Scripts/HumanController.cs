@@ -133,7 +133,10 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             var slappedFacingDir = slappedSpriteRenderer.flipX ? -1 : 1;
             var dirToSlapped = Math.Sign(nearestPlayer.transform.position.x - transform.position.x);
             bool fromBehind = slappedFacingDir == dirToSlapped;
-            nearestPlayer.GetComponent<GhostController>().GetSlapped(fromBehind);
+            
+            var ghostController = nearestPlayer.GetComponent<GhostController>();
+            ghostController.GetSlapped(fromBehind);
+            ghostController.SendGetSlappedMessage(fromBehind);
 
             // Play slap sound effect and create visual
             PlayerController.PlaySlapSound();
