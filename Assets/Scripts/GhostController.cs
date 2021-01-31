@@ -95,7 +95,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         
         var boost = new Vector2(_dashBoost, _dashBoost) * _dashDir;
         var move = new Vector2(inputX, inputY).normalized * speed;
-        var multiplier = (PossessObject.IsPossessing ? 0.5f : 1f);
+        var multiplier = IsConverting ? 0 : (PossessObject.IsPossessing ? 0.5f : 1f);
         var desiredVelocity = (move + boost) * new Vector2(multiplier, multiplier);
         Rigidbody2D.velocity = Vector3.Lerp(Rigidbody2D.velocity, desiredVelocity, accelSpeed * Time.deltaTime);
 
@@ -137,10 +137,19 @@ public class GhostController : MonoBehaviour, IPlayerMovement
 
     public void GetSlapped(bool fromBehind)
     {
-        PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
+        PlayerController.PlaySlapSound();
+
+        if (PossessObject.IsPossessing)
+        {
+            // Knock them out!
+            PossessObject.StopPossessing(true);
+        }
+        else
+        {
+            // Slap them back to humanity!PlayerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
         PlayerController.PlayerAnimator.SetTrigger("Slapped");
         IsConverting = true;
-        PlayerController.PlaySlapSound();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using UnityEngine;
 
 public class PossessObject : MonoBehaviour
@@ -11,6 +12,10 @@ public class PossessObject : MonoBehaviour
     public bool IsPossessing { get; set; }
     private float MinPossessionDistance { get; } = 1f;
     private int PossessedObjectIndex { get; set; } = -1;
+
+    // This is the time before they can possess after being slapped out of an object
+    public int possessCooldownMilliseconds { get; set; } = 1000;
+    private TimeSpan possessCooldown = new TimeSpan(0);
 
     private SpriteRenderer _playerSprite;
 
@@ -95,8 +100,13 @@ public class PossessObject : MonoBehaviour
     public void Update()
     {
         if (!IsLocal || NetworkPlayer.Game.CurrentState != Game.GameState.InProgress) return;
-        
-        if(!IsPossessing) CheckForPossessionObjects();
+
+        if (possessCooldown > TimeSpan.Zero)
+        {
+            possessCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
+        }
+
+        if (!IsPossessing) CheckForPossessionObjects();
 
         if (!Input.GetKeyDown(KeyCode.F)) return;
 
@@ -113,17 +123,26 @@ public class PossessObject : MonoBehaviour
         }
     }
 
-    private void StopPossessing()
+    public void StopPossessing(bool useCooldown = false)
     {
         PlayerController.PlayerAnimator.enabled = true;
-        CurrentPossessionObject.transform.position = transform.position;
-        CurrentPossessionObject.SpriteRenderer.enabled = true;
+        if (CurrentPossessionObject != null)
+        {
+            CurrentPossessionObject.transform.position = transform.position;
+            CurrentPossessionObject.SpriteRenderer.enabled = true;
+        }
         PlayerSprite.sprite = OriginalSprite;
         IsPossessing = false;
         NetworkPlayer.ShowUsername();
 
         if (IsLocal)
+        {
             PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.Others, PhotonView.Owner, PossessedObjectIndex);
+            if (useCooldown)
+            {
+                possessCooldown = new TimeSpan(possessCooldownMilliseconds * 10000); // 1 tick = 10,0000 ms
+            }
+        }
 
         PossessedObjectIndex = -1;
     }
@@ -154,6 +173,7 @@ public class PossessObject : MonoBehaviour
         pObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
         PlayerSprite.flipX = false;
+        IsPossessing = true;
         NetworkPlayer.HideUsername();
     }
     
@@ -168,6 +188,7 @@ public class PossessObject : MonoBehaviour
         pObject.transform.position = transform.position;
         pObject.SpriteRenderer.enabled = true;
         PlayerSprite.sprite = PlayerController.PlayerSprite;
+        IsPossessing = false;
         NetworkPlayer.ShowUsername();
     }
 }

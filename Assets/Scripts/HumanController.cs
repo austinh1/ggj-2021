@@ -99,7 +99,8 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
     private void CheckSlap()
     {
-        if (NetworkPlayer.Game.CurrentState != Game.GameState.InProgress)
+        // Don't allow hitting things before game starts. Only allow a single hit per slap animation.
+        if (NetworkPlayer.Game.CurrentState != Game.GameState.InProgress || PlayerController.PlayerAnimator.GetBool("SlapHitTarget"))
             return;
 
         PlayerController nearestPlayer = null;
@@ -137,6 +138,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             var ghostController = nearestPlayer.GetComponent<GhostController>();
             ghostController.GetSlapped(fromBehind);
             ghostController.SendGetSlappedMessage(fromBehind);
+            PlayerController.PlayerAnimator.SetBool("SlapHitTarget", true);
 
             // Play slap sound effect and create visual
             PlayerController.PlaySlapSound();
@@ -165,7 +167,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         if (PlayerController.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Slapping"))
             return;
 
+        PlayerController.PlayerAnimator.SetBool("SlapHitTarget", false);
         PlayerController.PlayerAnimator.SetTrigger("Slapping");
+
         if (IsLocal)
             PhotonView.RPC(nameof(PlayerController.SlapAnimationRPC), RpcTarget.Others, PhotonView.Owner);
     }
