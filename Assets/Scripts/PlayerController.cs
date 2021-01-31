@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     public bool IsHuman { get; private set; }
 
     public Sprite PlayerSprite { get; private set; }
-    public Animator PlayerAnimator { get; set; }
+    public Animator PlayerAnimator { get; private set; }
 
     private void Start()
     {
@@ -114,6 +114,6 @@ public class PlayerController : MonoBehaviour
         humanSprite.SetActive(true);
 
         PlayerSprite = humanSprite.GetComponent<SpriteRenderer>().sprite;
-        PlayerAnimator = ghostSprite.GetComponent<Animator>();
+        PlayerAnimator = humanSprite.GetComponent<Animator>();
     }
 }

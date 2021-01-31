@@ -23,6 +23,8 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         float inputX = Input.GetAxis("Horizontal Human");
         float inputY = Input.GetAxis("Vertical Human");
 
+        playerController.PlayerAnimator.SetBool("Walking", inputX != 0 || inputY != 0);
+
         var direction = new Vector3(inputX, inputY);
 
         rigidbody2D.velocity = direction.normalized * speed;
