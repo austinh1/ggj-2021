@@ -120,7 +120,8 @@ public class PossessObject : MonoBehaviour
         CurrentPossessionObject.SpriteRenderer.enabled = true;
         PlayerSprite.sprite = OriginalSprite;
         IsPossessing = false;
-        
+        NetworkPlayer.ShowUsername();
+
         if (IsLocal)
             PhotonView.RPC(nameof(StopPossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
 
@@ -135,7 +136,8 @@ public class PossessObject : MonoBehaviour
         CurrentPossessionObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = CurrentPossessionObject.SpriteRenderer.sprite;
         IsPossessing = true;
-        
+        NetworkPlayer.HideUsername();
+
         if (IsLocal)
             PhotonView.RPC(nameof(PossessObjectRPC), RpcTarget.OthersBuffered, PhotonView.Owner, PossessedObjectIndex);
     }
@@ -150,6 +152,7 @@ public class PossessObject : MonoBehaviour
         PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
         pObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
+        NetworkPlayer.HideUsername();
     }
     
     [PunRPC]
@@ -163,6 +166,7 @@ public class PossessObject : MonoBehaviour
         pObject.transform.position = transform.position;
         pObject.SpriteRenderer.enabled = true;
         PlayerSprite.sprite = PlayerController.PlayerSprite;
+        NetworkPlayer.ShowUsername();
     }
     
     

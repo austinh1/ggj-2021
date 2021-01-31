@@ -189,4 +189,14 @@ public class NetworkPlayer : MonoBehaviour
             MainMenu.RestartGame();
         }
     }
+
+    public void ShowUsername()
+    {
+        m_UsernameText.enabled = true;
+    }
+
+    public void HideUsername()
+    {
+        m_UsernameText.enabled = false;
+    }
 }
