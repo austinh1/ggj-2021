@@ -4,8 +4,7 @@ using UnityEngine;
 public class HumanController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
-
-    public Sprite[] sprites;
+    private PlayerController playerController;
 
     [Range(0.0f, 10.0f)]
     public float speed = 7f;
@@ -16,6 +15,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        playerController = GetComponent<PlayerController>();
     }
 
     void Update()
@@ -29,6 +29,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            playerController.PlayerAnimator.SetTrigger("Slapping");
             Slap();
         }
     }
@@ -66,7 +67,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         {
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
-            nearestPlayer.MakeIntoHuman();
+            nearestPlayer.PlayerAnimator.SetTrigger("Slapped");
         }
     }
 }
