@@ -21,6 +21,19 @@ public class Game : MonoBehaviour
     private NetworkPlayer NetworkPlayer { get; set; }
     
     private int KeysLeft { get; set; }
+    
+    private float StartTime { get; set; }
+    
+    private float SetUpDuration { get; } = 1f;
+
+    public bool SettingUp
+    {
+        get
+        {
+            var timeSinceStart = Time.time - StartTime;
+            return timeSinceStart < SetUpDuration;
+        }
+    }
 
     private void Start()
     {
@@ -113,6 +126,7 @@ public class Game : MonoBehaviour
     public void SetGameStateToInProgress()
     {
         CurrentState = GameState.InProgress;
+        StartTime = Time.time;
         
         foreach (var key in m_Keys)
         {

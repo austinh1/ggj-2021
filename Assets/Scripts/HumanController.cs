@@ -73,6 +73,9 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
     void Update()
     {
+        if (NetworkPlayer.Game.SettingUp)
+            return;
+        
         var inputX = Input.GetAxis("Horizontal Human");
         var inputY = Input.GetAxis("Vertical Human");
 
