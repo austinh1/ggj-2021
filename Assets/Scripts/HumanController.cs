@@ -5,7 +5,6 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 {
     private Rigidbody2D rigidbody2D;
     private PlayerController playerController;
-    private SpriteRenderer renderer;
 
     [Range(0.0f, 10.0f)]
     public float speed = 7f;
@@ -33,7 +32,6 @@ public class HumanController : MonoBehaviour, IPlayerMovement
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
-        renderer = transform.Find("HumanSprite").GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -57,7 +55,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
         if (rigidbody2D.velocity.x != 0)
         {
-           renderer.flipX = rigidbody2D.velocity.x < 0;
+           playerController.SetFlipX(rigidbody2D.velocity.x < 0);
         }
     }
 

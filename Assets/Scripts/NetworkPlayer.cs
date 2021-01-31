@@ -128,7 +128,7 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (PhotonView.Owner.Equals(player))
         {
-            Debug.Log($"Player {player.ActorNumber} was made into a ghost!");
+            Debug.Log($"Set position of player {player.ActorNumber}!");
             transform.position = position;
         }
     }
