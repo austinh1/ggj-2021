@@ -122,6 +122,13 @@ public class PlayerController : MonoBehaviour
 
     public void SetFlipX(bool flipX)
     {
+        // Never flip while posessing.
+        if (PossessObject.IsPossessing)
+        {
+            PlayerSpriteRenderer.flipX = false;
+            return;
+        }
+
         PlayerSpriteRenderer.flipX = flipX;
     }
 }

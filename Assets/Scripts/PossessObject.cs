@@ -135,6 +135,7 @@ public class PossessObject : MonoBehaviour
         PossessedObjectIndex = PossessionManager.instance._possessionObjects.IndexOf(CurrentPossessionObject);
         CurrentPossessionObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = CurrentPossessionObject.SpriteRenderer.sprite;
+        PlayerSprite.flipX = false;
         IsPossessing = true;
         NetworkPlayer.HideUsername();
 
@@ -152,6 +153,7 @@ public class PossessObject : MonoBehaviour
         PossessionObject pObject = PossessionManager.instance._possessionObjects[possessedObjectIndex];
         pObject.SpriteRenderer.enabled = false;
         PlayerSprite.sprite = pObject.SpriteRenderer.sprite;
+        PlayerSprite.flipX = false;
         NetworkPlayer.HideUsername();
     }
     
