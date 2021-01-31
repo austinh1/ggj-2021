@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Photon.Pun;
 using Photon.Realtime;
@@ -100,6 +101,9 @@ public class NetworkPlayer : MonoBehaviour
         {
             Debug.Log($"Player {player.ActorNumber} was made into a human!");
             Player.MakeIntoHuman();
+            
+            // var photonViews = PhotonNetwork.
+            // var humanPhotonView = photonViews.Where(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsHuman);
         }
     }
     

@@ -85,28 +85,26 @@ public class Game : MonoBehaviour
 
     public void PositionHumanAndGhosts()
     {
-        var photonViews = PhotonNetwork.PhotonViews;
-        var humanPhotonView = photonViews.First(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsHuman);
+        var networkPlayers = GetNetworkPlayers();
+        var humanPhotonView = networkPlayers.First(pv => pv.GetComponent<PlayerController>().IsHuman);
         humanPhotonView.transform.position = m_HumanSpawnPoint.position;
 
-        var ghostPhotonViews = photonViews.Where(pv =>
-            pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsGhost).ToList();
+        var ghostNetworkPlayers = networkPlayers.Where(pv => pv.GetComponent<PlayerController>().IsGhost).ToList();
 
-        if (!ghostPhotonViews.Any())
+        if (!ghostNetworkPlayers.Any())
             return;
 
         for (var i = 0; i < m_GhostSpawnPoints.Count; i++)
         {
-            if (i >= ghostPhotonViews.Count)
+            if (i >= ghostNetworkPlayers.Count)
                 break;
             
             var spawnPoint = m_GhostSpawnPoints[i];
             
-            var ghostPhotonView = ghostPhotonViews[i];
+            var ghostNetworkPlayer = ghostNetworkPlayers[i];
             var position = spawnPoint.position;
             
-            var networkPlayer = ghostPhotonView.GetComponent<NetworkPlayer>();
-            networkPlayer.SendSetPositionMessage(position);
+            ghostNetworkPlayer.SendSetPositionMessage(position);
         }
     }
 
@@ -166,5 +164,11 @@ public class Game : MonoBehaviour
         m_Sandwich.SetActive(false);
 
         KeysLeft = m_Keys.Count;
+    }
+
+    public List<NetworkPlayer> GetNetworkPlayers()
+    {
+        var playersInRoom = PhotonNetwork.PlayerList;
+        return PhotonNetwork.PhotonViews.Where(pv => playersInRoom.Contains(pv.Owner)).Select(pv => pv.GetComponent<NetworkPlayer>()).ToList();
     }
 }

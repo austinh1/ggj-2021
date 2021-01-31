@@ -72,8 +72,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
             RestartGame();
             NetworkPlayer.SendRestartGameMessage();
             
-            var networkPlayers = PhotonNetwork.PhotonViews.Select(pv =>
-                pv.GetComponent<NetworkPlayer>());
+            var networkPlayers = m_Game.GetNetworkPlayers();
             
             var originallyGhostNetworkPlayers = networkPlayers.Where(np => np.OriginallyGhost).ToList();
 
@@ -171,6 +170,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         
         base.OnPlayerEnteredRoom(newPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
+        
+        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient)
+            m_StartButton.gameObject.SetActive(true);
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -187,9 +189,6 @@ public class MainMenu : MonoBehaviourPunCallbacks
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
         m_JoinOrCreateRoom.SetActive(false);
         m_LeaveButton.gameObject.SetActive(true);
-        
-        if (PhotonNetwork.IsMasterClient)
-            m_StartButton.gameObject.SetActive(true);
         
         m_Game.JoinRoom();
     }
