@@ -9,6 +9,6 @@ public class GhostSlappedEnd : MonoBehaviour
     public void AnimationEnd()
     {
         var controller = GetComponentInParent<NetworkPlayer>();
-        controller.MakeIntoHuman();
+        controller.SendMakeIntoHumanMessage();
     }
 }

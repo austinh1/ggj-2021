@@ -88,7 +88,7 @@ public class NetworkPlayer : MonoBehaviour
         }
     }
 
-    public void MakeIntoHuman()
+    public void SendMakeIntoHumanMessage()
     {
         PhotonView.RPC(nameof(MakeIntoHumanRPC), RpcTarget.AllBuffered, PhotonView.Owner);
     }
@@ -103,7 +103,7 @@ public class NetworkPlayer : MonoBehaviour
         }
     }
     
-    public void MakeIntoGhost()
+    public void SendMakeIntoGhostMessage()
     {
         PhotonView.RPC(nameof(MakeIntoGhostRPC), RpcTarget.AllBuffered, PhotonView.Owner);
     }
@@ -117,6 +117,22 @@ public class NetworkPlayer : MonoBehaviour
             Player.MakeIntoGhost();
         }
     }
+
+    public void SendSetOriginallyGhostMessage(bool originallyGhost)
+    {
+        PhotonView.RPC(nameof(SetOriginallyGhostRPC), RpcTarget.AllBuffered, PhotonView.Owner, originallyGhost);
+    }
+    
+    [PunRPC]
+    public void SetOriginallyGhostRPC(Player player, bool originallyGhost)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} was set to be originally a ghost!");
+            OriginallyGhost = originallyGhost;
+        }
+    }
+
 
     public void SendSetPositionMessage(Vector3 position)
     {
