@@ -36,7 +36,7 @@ public class NetworkPlayer : MonoBehaviour
         }
     }
     
-    private bool IsLocal => PhotonView.IsMine;
+    public bool IsLocal => PhotonView.IsMine;
 
     public Observable<string> Username { get; } = new Observable<string>();
 
