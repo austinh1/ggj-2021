@@ -24,7 +24,7 @@ public class NetworkPlayer : MonoBehaviour
 
     private PhotonView m_PhotonView;
 
-    private PhotonView PhotonView
+    public PhotonView PhotonView
     {
         get
         {
@@ -38,7 +38,7 @@ public class NetworkPlayer : MonoBehaviour
     private bool IsLocal => PhotonView.IsMine;
 
     public Observable<string> Username { get; } = new Observable<string>();
-    
+
     public Game Game { get; set; }
     
     private MainMenu MainMenu { get; set; }
@@ -61,7 +61,6 @@ public class NetworkPlayer : MonoBehaviour
     }
 
     [PunRPC]
-    [UsedImplicitly]
     public void SetUsernameRPC(Player player, string username)
     {
         if (PhotonView.Owner.Equals(player))
@@ -132,7 +131,7 @@ public class NetworkPlayer : MonoBehaviour
         }
     }
     
-    public void SendGotKeyMessage(Key key)
+    public void SendGotKeyMessage(GameObject key)
     {
         if (!IsLocal)
             return;
@@ -150,6 +149,42 @@ public class NetworkPlayer : MonoBehaviour
         {
             Debug.Log($"Player {player.ActorNumber} found key {keyIndex}!");
             Game.GotKey(keyIndex);
+        }
+    }
+
+    public void SendGotSandwichMessage()
+    {
+        if (!IsLocal)
+            return;
+
+        Game.GotSandwich();
+        PhotonView.RPC(nameof(GotSandwichRPC), RpcTarget.Others, PhotonView.Owner);
+    }
+    
+    [PunRPC]
+    public void GotSandwichRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Game.GotSandwich();
+        }
+    }
+    
+    public void SendRestartGameMessage()
+    {
+        if (!IsLocal)
+            return;
+
+        MainMenu.RestartGame();
+        PhotonView.RPC(nameof(RestartGameRPC), RpcTarget.Others, PhotonView.Owner);
+    }
+    
+    [PunRPC]
+    public void RestartGameRPC(Player player)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            MainMenu.RestartGame();
         }
     }
 }

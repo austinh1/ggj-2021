@@ -209,8 +209,10 @@ MonoBehaviour:
   - {fileID: 8167950868525764366}
   - {fileID: 8167950869981234362}
   m_HumanSpawnPoint: {fileID: 8167950868486186490}
-  m_LockedDoor: {fileID: 0}
+  m_LockedDoors: []
   m_Keys:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
 --- !u!1 &8167950869981234363
 GameObject:

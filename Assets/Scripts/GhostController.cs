@@ -80,10 +80,13 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         if (!enabled)
             return;
         
-        var key = other.GetComponent<Key>();
-        if (key != null)
+        if (other.CompareTag("Key"))
         {
-            NetworkPlayer.SendGotKeyMessage(key);
+            NetworkPlayer.SendGotKeyMessage(other.gameObject);
+        }
+        else if (other.CompareTag("Sandwich"))
+        {
+            NetworkPlayer.SendGotSandwichMessage();
         }
     }
 }

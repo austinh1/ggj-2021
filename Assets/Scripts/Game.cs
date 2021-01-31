@@ -13,9 +13,10 @@ public class Game : MonoBehaviour
     [SerializeField] private List<Transform> m_GhostSpawnPoints;
     [SerializeField] private Transform m_HumanSpawnPoint;
     [SerializeField] private List<GameObject> m_LockedDoors;
-    [SerializeField] private List<Key> m_Keys;
+    [SerializeField] private List<GameObject> m_Keys;
+    [SerializeField] private GameObject m_Sandwich;
 
-    private GameState CurrentState { get; set; }
+    public GameState CurrentState { get; set; }
 
     private NetworkPlayer NetworkPlayer { get; set; }
     
@@ -29,6 +30,8 @@ public class Game : MonoBehaviour
         {
             key.gameObject.SetActive(false);
         }
+        
+        m_Sandwich.SetActive(false);
     }
 
     public void JoinRoom()
@@ -41,10 +44,19 @@ public class Game : MonoBehaviour
         m_Camera.transform.position = Vector3.zero;
 
         if (PhotonNetwork.IsMasterClient)
+        {
             NetworkPlayer.MakeIntoHuman();
+            NetworkPlayer.transform.position = m_HumanSpawnPoint.position;
+        }
         else
+        {
             NetworkPlayer.MakeIntoGhost();
-            
+            var index = PhotonNetwork.PlayerList.ToList().IndexOf(NetworkPlayer.PhotonView.Owner);
+            var ghostSpawnPoint = m_GhostSpawnPoints[index - 1];
+            NetworkPlayer.transform.position = ghostSpawnPoint.position;
+        }
+
+        m_MainMenu.NetworkPlayer = NetworkPlayer;
     }
 
     public void LeaveRoom()
@@ -53,7 +65,7 @@ public class Game : MonoBehaviour
         m_Camera.transform.position = Vector3.zero;
     }
 
-    private enum GameState
+    public enum GameState
     {
         Lobby,
         Setup,
@@ -66,6 +78,11 @@ public class Game : MonoBehaviour
         NetworkPlayer.SendStartGameMessage();
         SetGameStateToInProgress();
 
+        PositionHumanAndGhosts();
+    }
+
+    public void PositionHumanAndGhosts()
+    {
         var photonViews = PhotonNetwork.PhotonViews;
         var humanPhotonView = photonViews.First(pv => pv.GetComponent<PlayerController>() != null && pv.GetComponent<PlayerController>().IsHuman);
         humanPhotonView.transform.position = m_HumanSpawnPoint.position;
@@ -99,6 +116,8 @@ public class Game : MonoBehaviour
         {
             key.gameObject.SetActive(true);
         }
+        
+        m_Sandwich.SetActive(true);
     }
 
     public void GotKey(int keyIndex)
@@ -115,8 +134,33 @@ public class Game : MonoBehaviour
         }
     }
 
-    public int GetKeyIndex(Key key)
+    public int GetKeyIndex(GameObject key)
     {
         return m_Keys.IndexOf(key);
+    }
+
+    public void GotSandwich()
+    {
+        CurrentState = GameState.Complete;
+
+        if (NetworkPlayer.Player.IsGhost)
+            m_MainMenu.OpenWin();
+        else
+            m_MainMenu.OpenLose();
+        
+        m_Sandwich.SetActive(false);
+    }
+
+    public void RestartGame()
+    {
+        CurrentState = GameState.Lobby;
+
+        foreach (var lockedDoor in m_LockedDoors)
+            lockedDoor.SetActive(true);
+
+        foreach (var key in m_Keys)
+            key.SetActive(true);
+
+        KeysLeft = m_Keys.Count;
     }
 }

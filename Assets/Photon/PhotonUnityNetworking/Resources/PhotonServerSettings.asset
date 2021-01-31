@@ -35,19 +35,17 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - SetUsername
-  - SetHostText
-  - PossessObjectRPC
-  - StopPossessObjectRPC
-  - StartGame
+  - GotKeyRPC
   - MakeIntoGhostRPC
   - MakeIntoHumanRPC
+  - PossessObjectRPC
+  - RespawnSpaceship
+  - SetPositionRPC
   - SetUsernameRPC
   - StartGameRPC
-  - HighlightObjRPC
-  - SetPositionRPC
-  - GotKeyRPC
+  - StopPossessObjectRPC
+  - GotSandwichRPC
+  - RestartGameRPC
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
   DevRegionSetOnce: 1

@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Interactable
+  - Bullet
+  - Sandwich
+  - Key
   layers:
   - Default
   - TransparentFX

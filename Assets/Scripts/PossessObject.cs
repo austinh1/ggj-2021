@@ -50,7 +50,19 @@ public class PossessObject : MonoBehaviour
             return _playerController;
         }
     }
+    
+    private NetworkPlayer m_NetworkPlayer;
 
+    private NetworkPlayer NetworkPlayer
+    {
+        get
+        {
+            if (m_NetworkPlayer == null) m_NetworkPlayer = GetComponent<NetworkPlayer>();
+
+            return m_NetworkPlayer;
+        }
+    }
+    
     private void Start()
     {
         OriginalSprite = PlayerSprite.sprite;
@@ -82,7 +94,7 @@ public class PossessObject : MonoBehaviour
 
     public void Update()
     {
-        if (!IsLocal) return;
+        if (!IsLocal || NetworkPlayer.Game.CurrentState != Game.GameState.InProgress) return;
         
         if(!IsPossessing) CheckForPossessionObjects();
 

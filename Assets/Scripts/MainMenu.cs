@@ -14,10 +14,13 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_JoinButton;
     [SerializeField] private Button m_LeaveButton;
     [SerializeField] private Button m_StartButton;
+    [SerializeField] private Button m_Rematch;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
     [SerializeField] private TMP_Text m_Connecting;
+    [SerializeField] private TMP_Text m_Win;
+    [SerializeField] private TMP_Text m_Lose;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
     [SerializeField] private Game m_Game;
 
@@ -61,6 +64,14 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             m_StartButton.gameObject.SetActive(false);
             m_Game.StartGameMaster();
+        });
+        
+        m_Rematch.onClick.AddListener(delegate
+        {
+            RestartGame();
+            NetworkPlayer.SendRestartGameMessage();
+            
+            m_Game.PositionHumanAndGhosts();
         });
         
         PhotonNetwork.ConnectUsingSettings();
@@ -167,6 +178,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(true);
         m_LeaveButton.gameObject.SetActive(false);
         m_StartButton.gameObject.SetActive(false);
+        m_Win.gameObject.SetActive(false);
+        m_Lose.gameObject.SetActive(false);
+        m_Rematch.gameObject.SetActive(false);
         m_Error.text = string.Empty;
         
         m_Game.LeaveRoom();
@@ -177,5 +191,37 @@ public class MainMenu : MonoBehaviourPunCallbacks
         const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[Random.Next(s.Length)]).ToArray());
+    }
+
+    public void OpenWin()
+    {
+        m_Win.gameObject.SetActive(true);
+        m_Lose.gameObject.SetActive(false);
+        OpenRematch();
+    }
+
+    public void OpenLose()
+    {
+        m_Lose.gameObject.SetActive(true);
+        m_Win.gameObject.SetActive(false);
+        OpenRematch();
+    }
+
+    private void OpenRematch()
+    {
+        if (PhotonNetwork.IsMasterClient)
+            m_Rematch.gameObject.SetActive(true);
+    }
+
+    public void RestartGame()
+    {
+        m_Game.RestartGame();
+            
+        if (PhotonNetwork.IsMasterClient)
+            m_StartButton.gameObject.SetActive(true);
+            
+        m_Win.gameObject.SetActive(false);
+        m_Lose.gameObject.SetActive(false);
+        m_Rematch.gameObject.SetActive(false);
     }
 }
