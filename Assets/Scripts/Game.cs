@@ -12,7 +12,7 @@ public class Game : MonoBehaviour
     [SerializeField] private MainMenu m_MainMenu;
     [SerializeField] private List<Transform> m_GhostSpawnPoints;
     [SerializeField] private Transform m_HumanSpawnPoint;
-    [SerializeField] private List<GameObject> m_LockedDoors;
+    [SerializeField] private List<LockedDoor> m_LockedDoors;
     [SerializeField] private List<GameObject> m_Keys;
     [SerializeField] private GameObject m_Sandwich;
 
@@ -146,7 +146,7 @@ public class Game : MonoBehaviour
         if (KeysLeft <= 0)
         {
             foreach (var lockedDoor in m_LockedDoors)
-                lockedDoor.gameObject.SetActive(false);
+                lockedDoor.Close();
         }
     }
 
@@ -183,7 +183,7 @@ public class Game : MonoBehaviour
     public void ResetDoorKeyAndSandwich()
     {
         foreach (var lockedDoor in m_LockedDoors)
-            lockedDoor.SetActive(true);
+            lockedDoor.Open();
 
         foreach (var key in m_Keys)
             key.SetActive(false);
