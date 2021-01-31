@@ -376,13 +376,15 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             var entry = Instantiate(_roomEntryPrefab, _roomEntryParent, false);
             entry.transform.localScale = Vector3.one;
-            entry.transform.localPosition = new Vector3(350, index * -30, 0);
+            entry.transform.localPosition = new Vector3(370, index * -50, 0);
             entry.GetComponent<RoomEntry>().Init(info.Name, info.PlayerCount, info.MaxPlayers);
 
             _roomEntries.Add(entry);
 
             index++;
         }
+        
+        _roomEntryParent.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 35 + (index*50));
     }
 
     public void UpdateKeysLeft(int keysLeft)
