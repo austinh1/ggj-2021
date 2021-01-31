@@ -23,8 +23,8 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
     [SerializeField] private TMP_Text m_Connecting;
-    [SerializeField] private TMP_Text m_HumansWin;
-    [SerializeField] private TMP_Text m_GhostsWin;
+    [SerializeField] private GameObject m_HumansWin;
+    [SerializeField] private GameObject m_GhostsWin;
     [SerializeField] private TMP_Text m_Joining;
     [SerializeField] private TMP_Text m_KeysLeft;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
