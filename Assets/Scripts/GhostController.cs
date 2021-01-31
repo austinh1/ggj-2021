@@ -27,7 +27,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     
     private Observable<bool> _isFacingLeft = new Observable<bool>();
     
-    public bool IsConverting { get; private set; }
+    public bool IsConverting { get; set; }
     
     private PhotonView PhotonView
     {
