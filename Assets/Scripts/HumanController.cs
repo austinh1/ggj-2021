@@ -70,8 +70,12 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
 
-            // TODO: Determine whether the player was behind the ghost or not and adjust sprite accordingly
-            bool fromBehind = true;
+            var slappedRigidBody = nearestPlayer.GetComponent<Rigidbody2D>();
+            // Determine whether the player was behind the ghost or not and adjust sprite accordingly
+            // This actually gets the direction they are moving rather than "facing". We don't have a facing direction right now.
+            var slappedFacingDir = slappedRigidBody.velocity.x != 0 ? Math.Sign(slappedRigidBody.velocity.x) : 1;
+            var dirToSlapped = Math.Sign(nearestPlayer.transform.position.x - transform.position.x);
+            bool fromBehind = slappedFacingDir != dirToSlapped;
             nearestPlayer.PlayerAnimator.SetBool("FromBehind", fromBehind);
             nearestPlayer.PlayerAnimator.SetTrigger("Slapped");
         }
