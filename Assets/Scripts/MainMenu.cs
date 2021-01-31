@@ -19,6 +19,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private Button m_StartButton;
     [SerializeField] private Button m_Rematch;
     [SerializeField] private Button m_ShuffleHuman;
+    [SerializeField] private Button m_MuteButton;
     [SerializeField] private TMP_Text m_Error;
     [SerializeField] private TMP_Text m_RoomCode;
     [SerializeField] private TMP_Text m_PlayerCount;
@@ -94,6 +95,15 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
             StartCoroutine(Blah());
 
+        });
+
+        m_MuteButton.onClick.AddListener(delegate
+        {
+            var audioSources = m_MuteButton.GetComponentsInChildren<AudioSource>();
+            foreach(AudioSource source in audioSources)
+            {
+                source.enabled = !source.enabled;
+            }
         });
 
         void PlayAgain()
