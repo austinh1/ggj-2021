@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
@@ -11,10 +12,19 @@ public class Game : MonoBehaviour
     [SerializeField] private MainMenu m_MainMenu;
     [SerializeField] private List<Transform> m_GhostSpawnPoints;
     [SerializeField] private Transform m_HumanSpawnPoint;
+    [SerializeField] private List<GameObject> m_LockedDoors;
+    [SerializeField] private List<Key> m_Keys;
 
     private GameState CurrentState { get; set; }
 
     private NetworkPlayer NetworkPlayer { get; set; }
+    
+    private int KeysLeft { get; set; }
+
+    private void Start()
+    {
+        KeysLeft = m_Keys.Count;
+    }
 
     public void JoinRoom()
     {
@@ -79,5 +89,24 @@ public class Game : MonoBehaviour
     public void SetGameStateToInProgress()
     {
         CurrentState = GameState.InProgress;
+    }
+
+    public void GotKey(int keyIndex)
+    {
+        var key = m_Keys[keyIndex];
+        key.gameObject.SetActive(false);
+
+        KeysLeft -= 1;
+
+        if (KeysLeft <= 0)
+        {
+            foreach (var lockedDoor in m_LockedDoors)
+                lockedDoor.gameObject.SetActive(false);
+        }
+    }
+
+    public int GetKeyIndex(Key key)
+    {
+        return m_Keys.IndexOf(key);
     }
 }

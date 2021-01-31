@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7678207679168444742}
   - component: {fileID: 7678207679168444743}
   - component: {fileID: 7678207679168444736}
-  - component: {fileID: 7678207679168444741}
   m_Layer: 0
   m_Name: LockedDoor
   m_TagString: Untagged
@@ -111,16 +110,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7678207679168444741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7678207679168444737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a3e9f03a9fe89744b305648166f41c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NumRequiredKeys: 3

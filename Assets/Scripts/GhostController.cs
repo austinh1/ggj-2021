@@ -19,6 +19,19 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     [Range(0, 10)]
     public int dashCooldownSeconds = 3;
     
+    private NetworkPlayer m_NetworkPlayer;
+
+    private NetworkPlayer NetworkPlayer
+    {
+        get
+        {
+            if (m_NetworkPlayer == null)
+                m_NetworkPlayer = GetComponent<NetworkPlayer>();
+
+            return m_NetworkPlayer;
+        }
+    }
+    
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -60,5 +73,14 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     public void SetEnabled(bool value)
     {
         enabled = value;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        var key = other.GetComponent<Key>();
+        if (key != null)
+        {
+            NetworkPlayer.SendGotKeyMessage(key);
+        }
     }
 }

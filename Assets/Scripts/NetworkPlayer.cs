@@ -39,7 +39,7 @@ public class NetworkPlayer : MonoBehaviour
 
     public Observable<string> Username { get; } = new Observable<string>();
     
-    private Game Game { get; set; }
+    public Game Game { get; set; }
     
     private MainMenu MainMenu { get; set; }
     
@@ -129,6 +129,27 @@ public class NetworkPlayer : MonoBehaviour
         {
             Debug.Log($"Player {player.ActorNumber} was made into a ghost!");
             transform.position = position;
+        }
+    }
+    
+    public void SendGotKeyMessage(Key key)
+    {
+        if (!IsLocal)
+            return;
+
+        var index = Game.GetKeyIndex(key);
+        
+        Game.GotKey(index);
+        PhotonView.RPC(nameof(GotKeyRPC), RpcTarget.Others, PhotonView.Owner, index);
+    }
+    
+    [PunRPC]
+    public void GotKeyRPC(Player player, int keyIndex)
+    {
+        if (PhotonView.Owner.Equals(player))
+        {
+            Debug.Log($"Player {player.ActorNumber} found key {keyIndex}!");
+            Game.GotKey(keyIndex);
         }
     }
 }
