@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGhost { get; private set; } = true;
     public bool IsHuman { get; private set; }
 
+    public SpriteRenderer PlayerSpriteRenderer { get; private set; }
     public Sprite PlayerSprite { get; private set; }
     public Animator PlayerAnimator { get; private set; }
 
@@ -91,8 +92,9 @@ public class PlayerController : MonoBehaviour
         var humanSprite = transform.Find("HumanSprite").gameObject;
         ghostSprite.SetActive(true);
         humanSprite.SetActive(false);
-        
-        PlayerSprite = ghostSprite.GetComponent<SpriteRenderer>().sprite;
+
+        PlayerSpriteRenderer = ghostSprite.GetComponent<SpriteRenderer>();
+        PlayerSprite = PlayerSpriteRenderer.sprite;
         PlayerAnimator = ghostSprite.GetComponent<Animator>();
     }
 
@@ -113,7 +115,20 @@ public class PlayerController : MonoBehaviour
         ghostSprite.SetActive(false);
         humanSprite.SetActive(true);
 
-        PlayerSprite = humanSprite.GetComponent<SpriteRenderer>().sprite;
+        PlayerSpriteRenderer = humanSprite.GetComponent<SpriteRenderer>();
+        PlayerSprite = PlayerSpriteRenderer.sprite;
         PlayerAnimator = humanSprite.GetComponent<Animator>();
+    }
+
+    public void SetFlipX(bool flipX)
+    {
+        // Never flip while posessing.
+        if (PossessObject.IsPossessing)
+        {
+            PlayerSpriteRenderer.flipX = false;
+            return;
+        }
+
+        PlayerSpriteRenderer.flipX = flipX;
     }
 }

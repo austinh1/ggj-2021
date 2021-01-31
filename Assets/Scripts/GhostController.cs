@@ -9,6 +9,8 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     private Vector2 dashDir;
     private float dashBoost = 0f;
 
+    public bool IsConverting { get; private set; }
+
     [Range(0.0f, 10.0f)]
     public float speed = 5f;
 
@@ -48,6 +50,7 @@ public class GhostController : MonoBehaviour, IPlayerMovement
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
+        IsConverting = false;
     }
     
     void Update()
@@ -81,11 +84,23 @@ public class GhostController : MonoBehaviour, IPlayerMovement
         {
             dashCooldown -= TimeSpan.FromSeconds(Time.deltaTime);
         }
+
+        if (rigidbody2D.velocity.x != 0)
+        {
+            playerController.SetFlipX(rigidbody2D.velocity.x < 0);
+        }
     }
 
     public void SetEnabled(bool value)
     {
         enabled = value;
+    }
+
+    public void GetSlapped(bool fromBehind)
+    {
+        playerController.PlayerAnimator.SetBool("FromBehind", fromBehind);
+        playerController.PlayerAnimator.SetTrigger("Slapped");
+        IsConverting = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

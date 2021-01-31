@@ -144,7 +144,7 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (PhotonView.Owner.Equals(player))
         {
-            Debug.Log($"Player {player.ActorNumber} was made into a ghost!");
+            Debug.Log($"Set position of player {player.ActorNumber}!");
             transform.position = position;
         }
     }
@@ -204,5 +204,15 @@ public class NetworkPlayer : MonoBehaviour
         {
             MainMenu.RestartGame();
         }
+    }
+
+    public void ShowUsername()
+    {
+        m_UsernameText.enabled = true;
+    }
+
+    public void HideUsername()
+    {
+        m_UsernameText.enabled = false;
     }
 }

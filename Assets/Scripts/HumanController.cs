@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class HumanController : MonoBehaviour, IPlayerMovement
@@ -45,12 +46,19 @@ public class HumanController : MonoBehaviour, IPlayerMovement
 
         rigidbody2D.velocity = direction.normalized * speed;
 
-        if (Input.GetKeyDown(KeyCode.F))
+        bool isSlapping = playerController.PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Slapping");
+        if (isSlapping)
+        {
+            CheckSlap();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.F))
         {
             playerController.PlayerAnimator.SetTrigger("Slapping");
-            
-            if (NetworkPlayer.Game.CurrentState == Game.GameState.InProgress)
-                Slap();
+        }
+
+        if (rigidbody2D.velocity.x != 0)
+        {
+           playerController.SetFlipX(rigidbody2D.velocity.x < 0);
         }
     }
 
@@ -59,9 +67,11 @@ public class HumanController : MonoBehaviour, IPlayerMovement
         enabled = value;
     }
 
-    private void Slap()
+    private void CheckSlap()
     {
-        Debug.Log("Attempt slap...");
+        if (NetworkPlayer.Game.CurrentState != Game.GameState.InProgress)
+            return;
+
         PlayerController nearestPlayer = null;
         var closestDistance = float.PositiveInfinity;
         var players = GameObject.FindGameObjectsWithTag("Player");
@@ -76,7 +86,7 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             PlayerController playerScript = player.GetComponent<PlayerController>();
 
             float distanceFromPlayer = Vector3.Distance(player.transform.position, transform.position);
-            if (playerScript.IsGhost && distanceFromPlayer <= Math.Min(closestDistance, slapRange))
+            if (playerScript.IsGhost && !player.GetComponent<GhostController>().IsConverting && distanceFromPlayer <= Math.Min(closestDistance, slapRange))
             {
                 closestDistance = distanceFromPlayer;
                 nearestPlayer = playerScript;
@@ -88,14 +98,12 @@ public class HumanController : MonoBehaviour, IPlayerMovement
             var netPlayer = nearestPlayer.GetComponent<NetworkPlayer>();
             Debug.Log(String.Format("You slapped {0}!", netPlayer.Username.Value));
 
-            var slappedRigidBody = nearestPlayer.GetComponent<Rigidbody2D>();
+            var slappedSpriteRenderer = nearestPlayer.transform.Find("GhostSprite").GetComponent<SpriteRenderer>();
             // Determine whether the player was behind the ghost or not and adjust sprite accordingly
-            // This actually gets the direction they are moving rather than "facing". We don't have a facing direction right now.
-            var slappedFacingDir = slappedRigidBody.velocity.x != 0 ? Math.Sign(slappedRigidBody.velocity.x) : Math.Sign(slappedRigidBody.transform.localScale.x);
+            var slappedFacingDir = slappedSpriteRenderer.flipX ? -1 : 1;
             var dirToSlapped = Math.Sign(nearestPlayer.transform.position.x - transform.position.x);
             bool fromBehind = slappedFacingDir == dirToSlapped;
-            nearestPlayer.PlayerAnimator.SetBool("FromBehind", fromBehind);
-            nearestPlayer.PlayerAnimator.SetTrigger("Slapped");
+            nearestPlayer.GetComponent<GhostController>().GetSlapped(fromBehind);
 
             // Play slap sound effect and create visual
             var audioSource = GetComponent<AudioSource>();
