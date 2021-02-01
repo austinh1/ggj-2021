@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _roomEntryPrefab;
     [SerializeField] private Transform _roomEntryParent;
     [SerializeField] private List<GameObject> _roomEntries;
-    
+
     [SerializeField] private TMP_InputField m_NewRoomCodeField;
     [SerializeField] private TMP_InputField m_UsernameField;
     [SerializeField] private Button m_CreateButton;
@@ -34,23 +34,30 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject m_GhostsWin;
     [SerializeField] private TMP_Text m_Joining;
     [SerializeField] private TMP_Text m_KeysLeft;
+    [SerializeField] private TMP_Text m_HumanCount;
+    [SerializeField] private TMP_Text m_GhostCount;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
+    [SerializeField] private GameObject m_HUD;
+    [SerializeField] private GameObject m_TitleScreen;
     [SerializeField] private Game m_Game;
 
     private readonly Dictionary<string, RoomInfo> _cachedRoomList = new Dictionary<string, RoomInfo>();
 
     public Dictionary<string, RoomInfo> CachedRoomList => _cachedRoomList;
-    
+
     public string Username { get; private set; }
 
     private Observable<string> RoomCode { get; } = new Observable<string>();
 
     private Observable<int> PlayerCount { get; } = new Observable<int>();
-    
+
     private static Random Random { get; } = new Random();
-    
+
     public NetworkPlayer NetworkPlayer { get; set; }
-    
+
+    private int humanCount { get; set; }
+    private int ghostCount { get; set; }
+
     private void Start()
     {
         m_NewRoomCodeField.onSubmit.AddListener(delegate
@@ -144,6 +151,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(false);
         m_QuitButton.gameObject.SetActive(false);
         m_Joining.gameObject.SetActive(true);
+        ModifyHumanCount(1);
     }
 
     bool ValidateRoomName()
@@ -285,6 +293,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
         m_LeaveButton.gameObject.SetActive(true);
         m_Joining.gameObject.SetActive(false);
+        m_HUD.SetActive(true);
+        m_TitleScreen.SetActive(false);
+
+        SetHumanCount(0);
+        SetGhostCount(0);
 
         m_Game.JoinRoom();
     }
@@ -305,7 +318,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_Rematch.gameObject.SetActive(false);
         m_ShuffleHuman.gameObject.SetActive(false);
         m_Error.text = string.Empty;
-        
+        m_HUD.SetActive(false);
+        m_TitleScreen.SetActive(true);
+
         m_Game.LeaveRoom();
     }
     
@@ -411,5 +426,27 @@ public class MainMenu : MonoBehaviourPunCallbacks
     public void UpdateKeysLeft(int keysLeft)
     {
         m_KeysLeft.text = keysLeft.ToString();
+    }
+
+    public void ModifyHumanCount(int adjust)
+    {
+        SetHumanCount(humanCount + adjust);
+    }
+
+    public void ModifyGhostCount(int adjust)
+    {
+        SetGhostCount(ghostCount + adjust);
+    }
+
+    private void SetHumanCount(int amount)
+    {
+        humanCount = amount;
+        m_HumanCount.text = humanCount.ToString();
+    }
+
+    private void SetGhostCount(int amount)
+    {
+        ghostCount = amount;
+        m_GhostCount.text = ghostCount.ToString();
     }
 }

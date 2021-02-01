@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip slapSound;
 
     private GhostController m_GhostController;
+    private MainMenu m_MainMenu;
 
     private GhostController GhostController
     {
@@ -60,7 +61,24 @@ public class PlayerController : MonoBehaviour
             return m_PhotonView;
         }
     }
-    
+
+    public MainMenu MainMenu
+    {
+        get
+        {
+            if (m_MainMenu == null)
+            {
+                var gameObj = GameObject.Find("Main Menu");
+                if (gameObj != null)
+                {
+                    m_MainMenu = gameObj.GetComponent<MainMenu>();
+                }
+            }
+
+            return m_MainMenu;
+        }
+    }
+
     private bool IsLocal => PhotonView.IsMine;
 
     public bool IsGhost { get; private set; } = true;
@@ -82,6 +100,12 @@ public class PlayerController : MonoBehaviour
 
     public void MakeIntoGhost()
     {
+        if (IsHuman)
+        {
+            MainMenu.ModifyGhostCount(1);
+            MainMenu.ModifyHumanCount(-1);
+        }
+
         IsGhost = true;
         IsHuman = false;
         
@@ -106,6 +130,12 @@ public class PlayerController : MonoBehaviour
 
     public void MakeIntoHuman()
     {
+        if (IsGhost)
+        {
+            MainMenu.ModifyHumanCount(1);
+            MainMenu.ModifyGhostCount(-1);
+        }
+
         IsGhost = false;
         IsHuman = true;
         
@@ -113,7 +143,7 @@ public class PlayerController : MonoBehaviour
         {
             GhostController.SetEnabled(false);
             HumanController.SetEnabled(true);
-            PossessObject.enabled = false;    
+            PossessObject.enabled = false;
         }
 
         var ghostSprite = transform.Find("GhostSprite").gameObject;
