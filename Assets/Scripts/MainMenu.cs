@@ -300,6 +300,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.CurrentRoom.MaxPlayers--;
         }
+
+        if (PlayerCount.Value <= 1)
+        {
+            m_StartButton.gameObject.SetActive(false);
+        }
     }
 
     public override void OnJoinedRoom()
