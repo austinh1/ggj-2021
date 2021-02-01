@@ -274,7 +274,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
         
-        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient && m_Game.CurrentState == Game.GameState.Setup)
+        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient && m_Game.CurrentState != Game.GameState.InProgress && m_Game.CurrentState != Game.GameState.Complete)
             m_StartButton.gameObject.SetActive(true);
     }
 
@@ -293,6 +293,12 @@ public class MainMenu : MonoBehaviourPunCallbacks
         else if (humanNum == networkPlayers.Count()) // No ghosts
         {
             m_Game.AllHumans();
+        }
+
+        // Decrement number of players allowed in room if it is in progress, to prevent people from jumping in mid-game.
+        if (m_Game.CurrentState != Game.GameState.Setup)
+        {
+            PhotonNetwork.CurrentRoom.MaxPlayers--;
         }
     }
 
