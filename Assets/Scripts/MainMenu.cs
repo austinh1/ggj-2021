@@ -245,16 +245,6 @@ public class MainMenu : MonoBehaviourPunCallbacks
         
     }
 
-    private void OnGUI()
-    {
-        if(PhotonNetwork.IsConnected)
-            GUILayout.Label($"{PhotonNetwork.CountOfRooms} rooms active. {PhotonNetwork.CountOfPlayers} players active. {PhotonNetwork.CountOfPlayersInRooms} players in rooms.");
-
-        foreach (var kvp in CachedRoomList){
-            GUILayout.Label($"{kvp.Key} : {kvp.Value.PlayerCount}");
-        }
-    }
-
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("DISCONNECTED");
