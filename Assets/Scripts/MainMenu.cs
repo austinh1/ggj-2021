@@ -151,7 +151,6 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_JoinOrCreateRoom.SetActive(false);
         m_QuitButton.gameObject.SetActive(false);
         m_Joining.gameObject.SetActive(true);
-        ModifyHumanCount(1);
     }
 
     bool ValidateRoomName()
@@ -275,7 +274,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
         
-        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient)
+        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient && m_Game.CurrentState == Game.GameState.Setup)
             m_StartButton.gameObject.SetActive(true);
     }
 
@@ -284,6 +283,17 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log($"Player {otherPlayer.ActorNumber} left :(");
         base.OnPlayerLeftRoom(otherPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
+
+        var networkPlayers = m_Game.GetNetworkPlayers();
+        var humanNum = networkPlayers.Count(np => np.GetComponent<PlayerController>().IsHuman);
+        if (humanNum == 0)
+        {
+            m_Game.AllGhosts();
+        }
+        else if (humanNum == networkPlayers.Count()) // No ghosts
+        {
+            m_Game.AllHumans();
+        }
     }
 
     public override void OnJoinedRoom()

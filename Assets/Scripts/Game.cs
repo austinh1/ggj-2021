@@ -199,11 +199,26 @@ public class Game : MonoBehaviour
     
     public void AllHumans()
     {
-        CurrentState = GameState.Complete;
+        if (CurrentState == GameState.InProgress)
+        {
+            CurrentState = GameState.Complete;
 
-        m_MainMenu.OpenHumansWin();
-        
-        m_Sandwich.SetActive(false);
+            m_MainMenu.OpenHumansWin();
+
+            m_Sandwich.SetActive(false);
+        }
+    }
+
+    public void AllGhosts()
+    {
+        if (CurrentState == GameState.InProgress)
+        {
+            CurrentState = GameState.Complete;
+
+            m_MainMenu.OpenGhostsWin();
+
+            m_Sandwich.SetActive(false);
+        }
     }
 
     public void RestartGame()
