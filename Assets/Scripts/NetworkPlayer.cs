@@ -61,6 +61,27 @@ public class NetworkPlayer : MonoBehaviour
 
         if (IsLocal)
             Username.Value = MainMenu.Username;
+
+        if (Player.IsGhost)
+        {
+            MainMenu.ModifyGhostCount(1);
+        }
+        else if (Player.IsHuman)
+        {
+            MainMenu.ModifyHumanCount(1);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Player.IsGhost)
+        {
+            MainMenu.ModifyGhostCount(-1);
+        }
+        else if (Player.IsHuman)
+        {
+            MainMenu.ModifyHumanCount(-1);
+        }
     }
 
     [PunRPC]

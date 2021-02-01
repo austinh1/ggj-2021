@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _roomEntryPrefab;
     [SerializeField] private Transform _roomEntryParent;
     [SerializeField] private List<GameObject> _roomEntries;
-    
+
     [SerializeField] private TMP_InputField m_NewRoomCodeField;
     [SerializeField] private TMP_InputField m_UsernameField;
     [SerializeField] private Button m_CreateButton;
@@ -36,23 +36,30 @@ public class MainMenu : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject m_GhostsWin;
     [SerializeField] private TMP_Text m_Joining;
     [SerializeField] private TMP_Text m_KeysLeft;
+    [SerializeField] private TMP_Text m_HumanCount;
+    [SerializeField] private TMP_Text m_GhostCount;
     [SerializeField] private GameObject m_JoinOrCreateRoom;
+    [SerializeField] private GameObject m_HUD;
+    [SerializeField] private GameObject m_TitleScreen;
     [SerializeField] private Game m_Game;
 
     private readonly Dictionary<string, RoomInfo> _cachedRoomList = new Dictionary<string, RoomInfo>();
 
     public Dictionary<string, RoomInfo> CachedRoomList => _cachedRoomList;
-    
+
     public string Username { get; private set; }
 
     private Observable<string> RoomCode { get; } = new Observable<string>();
 
     private Observable<int> PlayerCount { get; } = new Observable<int>();
-    
+
     private static Random Random { get; } = new Random();
-    
+
     public NetworkPlayer NetworkPlayer { get; set; }
-    
+
+    private int humanCount { get; set; }
+    private int ghostCount { get; set; }
+
     private void Start()
     {
         m_NewRoomCodeField.onSubmit.AddListener(delegate
@@ -272,7 +279,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         base.OnPlayerEnteredRoom(newPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
         
-        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient)
+        if (PlayerCount.Value > 1 && PhotonNetwork.IsMasterClient && m_Game.CurrentState != Game.GameState.InProgress && m_Game.CurrentState != Game.GameState.Complete)
             m_StartButton.gameObject.SetActive(true);
     }
 
@@ -281,6 +288,28 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log($"Player {otherPlayer.ActorNumber} left :(");
         base.OnPlayerLeftRoom(otherPlayer);
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
+
+        var networkPlayers = m_Game.GetNetworkPlayers();
+        var humanNum = networkPlayers.Count(np => np.GetComponent<PlayerController>().IsHuman);
+        if (humanNum == 0)
+        {
+            m_Game.AllGhosts();
+        }
+        else if (humanNum == networkPlayers.Count()) // No ghosts
+        {
+            m_Game.AllHumans();
+        }
+
+        // Decrement number of players allowed in room if it is in progress, to prevent people from jumping in mid-game.
+        if (m_Game.CurrentState != Game.GameState.Setup)
+        {
+            PhotonNetwork.CurrentRoom.MaxPlayers--;
+        }
+
+        if (PlayerCount.Value <= 1)
+        {
+            m_StartButton.gameObject.SetActive(false);
+        }
     }
 
     public override void OnJoinedRoom()
@@ -291,6 +320,11 @@ public class MainMenu : MonoBehaviourPunCallbacks
         _titleScreen.SetActive(false);
         m_LeaveButton.gameObject.SetActive(true);
         m_Joining.gameObject.SetActive(false);
+        m_HUD.SetActive(true);
+        m_TitleScreen.SetActive(false);
+
+        SetHumanCount(0);
+        SetGhostCount(0);
 
         m_Game.JoinRoom();
     }
@@ -312,7 +346,9 @@ public class MainMenu : MonoBehaviourPunCallbacks
         m_Rematch.gameObject.SetActive(false);
         m_ShuffleHuman.gameObject.SetActive(false);
         m_Error.text = string.Empty;
-        
+        m_HUD.SetActive(false);
+        m_TitleScreen.SetActive(true);
+
         m_Game.LeaveRoom();
     }
     
@@ -418,5 +454,27 @@ public class MainMenu : MonoBehaviourPunCallbacks
     public void UpdateKeysLeft(int keysLeft)
     {
         m_KeysLeft.text = keysLeft.ToString();
+    }
+
+    public void ModifyHumanCount(int adjust)
+    {
+        SetHumanCount(humanCount + adjust);
+    }
+
+    public void ModifyGhostCount(int adjust)
+    {
+        SetGhostCount(ghostCount + adjust);
+    }
+
+    private void SetHumanCount(int amount)
+    {
+        humanCount = amount;
+        m_HumanCount.text = humanCount.ToString();
+    }
+
+    private void SetGhostCount(int amount)
+    {
+        ghostCount = amount;
+        m_GhostCount.text = ghostCount.ToString();
     }
 }
