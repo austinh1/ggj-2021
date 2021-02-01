@@ -1464,6 +1464,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1184669811786287951, guid: b11bb9257ffcdc340bf0ac5754983094,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2680489261635883644, guid: b11bb9257ffcdc340bf0ac5754983094,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2680489261635883644, guid: b11bb9257ffcdc340bf0ac5754983094,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6943290357449861381, guid: b11bb9257ffcdc340bf0ac5754983094,
         type: 3}
       propertyPath: m_IsActive
@@ -1593,6 +1608,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066305737140672327, guid: b11bb9257ffcdc340bf0ac5754983094,
+        type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b11bb9257ffcdc340bf0ac5754983094, type: 3}

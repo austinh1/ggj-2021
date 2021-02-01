@@ -12,6 +12,8 @@ using Random = System.Random;
 
 public class MainMenu : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private GameObject _titleScreen;
+    
     [SerializeField] private GameObject _roomEntryPrefab;
     [SerializeField] private Transform _roomEntryParent;
     [SerializeField] private List<GameObject> _roomEntries;
@@ -140,7 +142,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
 
         RoomCode.Value = m_NewRoomCodeField.text;
         PhotonNetwork.CreateRoom(RoomCode.Value, new RoomOptions() { MaxPlayers = 10 });
-            
+        
         m_JoinOrCreateRoom.SetActive(false);
         m_QuitButton.gameObject.SetActive(false);
         m_Joining.gameObject.SetActive(true);
@@ -186,6 +188,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         RoomCode.Value = roomName;
         PhotonNetwork.JoinRoom(RoomCode.Value);
             
+        _titleScreen.SetActive(false);
         m_JoinOrCreateRoom.SetActive(false);
         m_QuitButton.gameObject.SetActive(false);
         m_Joining.gameObject.SetActive(true);
@@ -237,6 +240,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
     {
         Debug.Log("CONNECTED");
         m_Connecting.gameObject.SetActive(false);
+        _titleScreen.SetActive(true);
         m_JoinOrCreateRoom.SetActive(true);
         m_QuitButton.gameObject.SetActive(true);
 
@@ -255,6 +259,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log($"Error joining room: {returnCode}, {message}");
         
         m_Error.text = $"Couldn't find room {m_NewRoomCodeField.text}!";
+        _titleScreen.SetActive(true);
         m_JoinOrCreateRoom.gameObject.SetActive(true);
         m_QuitButton.gameObject.SetActive(true);
         m_Joining.gameObject.SetActive(false);
@@ -283,6 +288,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         Debug.Log($"Joined room {RoomCode.Value}");
         
         PlayerCount.Value = PhotonNetwork.PlayerList.Length;
+        _titleScreen.SetActive(false);
         m_LeaveButton.gameObject.SetActive(true);
         m_Joining.gameObject.SetActive(false);
 
@@ -296,6 +302,7 @@ public class MainMenu : MonoBehaviourPunCallbacks
         base.OnLeftRoom();
         RoomCode.Value = string.Empty;
         PlayerCount.Value = 0;
+        _titleScreen.SetActive(true);
         m_JoinOrCreateRoom.SetActive(true);
         m_QuitButton.gameObject.SetActive(true);
         m_LeaveButton.gameObject.SetActive(false);
